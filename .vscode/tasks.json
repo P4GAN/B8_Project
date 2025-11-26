@@ -1,0 +1,17 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "cmake: configure & build (with Geant4 env)",
+      "type": "shell",
+      "command": "bash",
+      "args": [
+        "-lc",
+        "source /Users/ParkinPham/Programming/geant4-v11.3.2-install/bin/geant4.sh && cmake -S . -B build -DCMAKE_BUILD_TYPE=Debug && cmake --build build -- -j && echo 'Build finished.'"
+      ],
+      "group": { "kind": "build", "isDefault": true },
+      "presentation": { "echo": true, "reveal": "always", "panel": "shared" },
+      "problemMatcher": []
+    }
+  ]
+}
