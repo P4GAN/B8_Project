@@ -21,7 +21,8 @@
 /vis/viewer/zoom 1.4
 #
 # Specify style (surface, wireframe, auxiliary edges,...)
-#/vis/viewer/set/style wireframe
+/vis/viewer/set/style surface
+/vis/viewer/set/background white
 #/vis/viewer/set/auxiliaryEdge true
 #/vis/viewer/set/lineSegmentsPerCircle 100
 #

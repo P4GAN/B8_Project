@@ -1,3 +1,0 @@
-/Users/parkinpham/Programming/Physics/B8_04/build/CMakeFiles/exampleB2a.dir
-/Users/parkinpham/Programming/Physics/B8_04/build/CMakeFiles/edit_cache.dir
-/Users/parkinpham/Programming/Physics/B8_04/build/CMakeFiles/rebuild_cache.dir

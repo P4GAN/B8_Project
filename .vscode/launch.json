@@ -10,7 +10,7 @@
         "request": "launch",
         "program": "${workspaceFolder}/exampleB2/build/exampleB2a", 
         "args": [],
-        "cwd": "${workspaceFolder}",
+        "cwd": "${workspaceFolder}/exampleB2",
         "preLaunchTask": "cmake: configure & build (with Geant4 env)",
         "environment": [],
         "externalConsole": false,

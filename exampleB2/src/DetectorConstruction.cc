@@ -188,12 +188,19 @@ G4VPhysicalVolume* DetectorConstruction::DefineVolumes()
 
   // Visualization attributes
 
-  G4VisAttributes boxVisAtt(G4Colour::White());
+  G4VisAttributes worldVisAtt(G4Colour::White());
+  worldVisAtt.SetVisibility(true);
+  worldVisAtt.SetForceWireframe(true);
+
+  G4VisAttributes trackerVisAtt(G4Colour::Green());
+  trackerVisAtt.SetForceWireframe(true);
+
   G4VisAttributes chamberVisAtt(G4Colour::Yellow());
 
-  // worldLV->SetVisAttributes(boxVisAtt);
-  // fLogicTarget->SetVisAttributes(boxVisAtt);
-  // trackerLV->SetVisAttributes(boxVisAtt);
+  worldLV->SetVisAttributes(worldVisAtt);
+  fLogicTarget->SetVisAttributes(G4VisAttributes(G4Colour::Red()));
+  trackerLV->SetVisAttributes(trackerVisAtt);
+
 
   // Tracker segments
 
@@ -226,7 +233,7 @@ G4VPhysicalVolume* DetectorConstruction::DefineVolumes()
     fLogicChamber[copyNo] =
       new G4LogicalVolume(chamberS, fChamberMaterial, "Chamber_LV", nullptr, nullptr, nullptr);
 
-    //fLogicChamber[copyNo]->SetVisAttributes(chamberVisAtt);
+    fLogicChamber[copyNo]->SetVisAttributes(chamberVisAtt);
 
     new G4PVPlacement(nullptr,  // no rotation
                       G4ThreeVector(0, 0, Zposition),  // at (x,y,z)

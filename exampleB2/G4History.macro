@@ -13,6 +13,8 @@
 /vis/sceneHandler/attach
 /vis/viewer/set/viewpointThetaPhi 90. 180.
 /vis/viewer/zoom 1.4
+/vis/viewer/set/style surface
+/vis/viewer/set/background white
 /vis/scene/add/trajectories smooth
 /tracking/storeTrajectory 2
 /vis/scene/notifyHandlers
