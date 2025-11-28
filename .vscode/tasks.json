@@ -12,6 +12,23 @@
       "group": { "kind": "build", "isDefault": true },
       "presentation": { "echo": true, "reveal": "always", "panel": "shared" },
       "problemMatcher": []
+    },
+    {
+      "label": "Build & Run Pythia8",
+      "type": "shell",
+      "command": "/bin/bash",
+      "args": [
+        "-lc",
+        "g++ -o examplePythia examplePythia.cpp $(/Users/parkinpham/Programming/pythia8316/bin/pythia8-config --cxxflags --libs --hepmc3) && ./examplePythia"
+      ],
+      "options": {
+        "cwd": "${workspaceFolder}/examplePythia"
+      },
+      "problemMatcher": "$gcc",
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      }
     }
   ]
 }

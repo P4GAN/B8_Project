@@ -55,3 +55,26 @@
 /gui/addButton viewer "Update viewer (interaction or end-of-file)" "/vis/viewer/update"
 /gui/addButton viewer "Flush viewer (= refresh + update)" "/vis/viewer/flush"
 /gui/addButton viewer "Update scene" "/vis/scene/notifyHandlers"
+/run/beamOn 1
+/vis/scene/notifyHandlers scene-0
+/run/beamOn 10
+/vis/set/touchable World 0 Tracker 0
+/vis/touchable/set/visibility false
+/vis/viewer/refresh
+/vis/scene/notifyHandlers
+/vis/touchable/set/daughtersInvisible true
+/vis/viewer/refresh
+/vis/scene/notifyHandlers
+/vis/set/touchable World 0 Tracker 0
+/vis/touchable/set/visibility true
+/vis/viewer/refresh
+/vis/scene/notifyHandlers
+/vis/touchable/set/daughtersInvisible false
+/vis/viewer/refresh
+/vis/scene/notifyHandlers
+/vis/scene/activateModel "G4TrajectoriesModel for any type of trajectory" false
+/vis/scene/notifyHandlers
+/vis/scene/activateModel "G4TrajectoriesModel for any type of trajectory" true
+/vis/scene/notifyHandlers
+/run/beamOn 3
+/run/beamOn 1
