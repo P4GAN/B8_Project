@@ -6,7 +6,7 @@
 using namespace Pythia8;
 
 int main() {
-    int nEvents = 1000;
+    int nEvents = 1;
     Pythia8::Pythia8ToHepMC toHepMC("../electron_proton.hepmc");
 
     // Generator. Process selection. LHC initialization. Histogram.

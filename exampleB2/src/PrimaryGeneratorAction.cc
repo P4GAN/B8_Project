@@ -35,32 +35,23 @@
 #include "G4ParticleGun.hh"
 #include "G4ParticleTable.hh"
 #include "G4SystemOfUnits.hh"
+#include "G4ParticleDefinition.hh"
+#include "G4ios.hh"
 
 namespace B2
 {
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-PrimaryGeneratorAction::PrimaryGeneratorAction()
+PrimaryGeneratorAction::PrimaryGeneratorAction(const std::string& hepmcFile)
+  : hepMCReader(hepmcFile)
 {
-  G4int nofParticles = 1;
-  fParticleGun = new G4ParticleGun(nofParticles);
-
-  // default particle kinematic
-
-  G4ParticleDefinition* particleDefinition =
-    G4ParticleTable::GetParticleTable()->FindParticle("proton");
-
-  fParticleGun->SetParticleDefinition(particleDefinition);
-  fParticleGun->SetParticleMomentumDirection(G4ThreeVector(0., 0., 1.));
-  fParticleGun->SetParticleEnergy(3.0 * GeV);
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-PrimaryGeneratorAction::~PrimaryGeneratorAction()
-{
-  delete fParticleGun;
+  if (hepMCReader.failed()) {
+    G4Exception("PrimaryGeneratorAction",
+                "HEPMC_READER_FAIL",
+                FatalException,
+                ("Cannot open HepMC file " + hepmcFile).c_str());
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -69,27 +60,51 @@ void PrimaryGeneratorAction::GeneratePrimaries(G4Event* event)
 {
   // This function is called at the begining of event
 
-  // In order to avoid dependence of PrimaryGeneratorAction
-  // on DetectorConstruction class we get world volume
-  // from G4LogicalVolumeStore.
+  HepMC3::GenEvent hepmcEvent;
+  hepMCReader.read_event(hepmcEvent);
 
-  G4double worldZHalfLength = 0;
-  G4LogicalVolume* worldLV = G4LogicalVolumeStore::GetInstance()->GetVolume("World");
-  G4Box* worldBox = nullptr;
-  if (worldLV) worldBox = dynamic_cast<G4Box*>(worldLV->GetSolid());
-  if (worldBox)
-    worldZHalfLength = worldBox->GetZHalfLength();
-  else {
-    G4cerr << "World volume of box not found." << G4endl;
-    G4cerr << "Perhaps you have changed geometry." << G4endl;
-    G4cerr << "The gun will be place in the center." << G4endl;
+  G4ParticleTable* particleTable = G4ParticleTable::GetParticleTable();
+
+  if (hepMCReader.failed()) {
+    return;
   }
 
-  // Starting a primary particle close to the world boundary.
-  //
-  fParticleGun->SetParticlePosition(G4ThreeVector(0., 0., -worldZHalfLength + 1 * um));
+  for (auto vertex : hepmcEvent.vertices()) {
+    auto position = vertex->position(); 
 
-  fParticleGun->GeneratePrimaryVertex(event);
+    auto g4Vertex = new G4PrimaryVertex(
+        position.x() * mm,
+        position.y() * mm,
+        position.z() * mm,
+        position.t() * ns   
+    );
+
+  
+    for (auto particle : vertex->particles_out()) {
+      // HepMC3 status convention: 1 is usually final state
+      if (particle->status() != 1) continue;
+
+      G4ParticleDefinition* particleDef = particleTable->FindParticle(particle->pid());
+      G4cout << "Emitted " << particleDef->GetParticleName() << " with energy " << particle->momentum().e() * GeV << " GeV" << G4endl;
+
+      auto momentum = particle->momentum();
+      auto primary = new G4PrimaryParticle(
+          particle->pid(),
+          momentum.px() * GeV,
+          momentum.py() * GeV,
+          momentum.pz() * GeV
+      );
+      
+      g4Vertex->SetPrimary(primary);
+    }
+
+    // Only keep vertices that actually have primaries
+    if (g4Vertex->GetNumberOfParticle() > 0) {
+      event->AddPrimaryVertex(g4Vertex);
+    } else {
+      delete g4Vertex;
+    }
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

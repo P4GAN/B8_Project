@@ -47,7 +47,9 @@ void ActionInitialization::BuildForMaster() const
 
 void ActionInitialization::Build() const
 {
-  SetUserAction(new PrimaryGeneratorAction);
+  std::string hepmcFileName = "../electron_proton.hepmc";
+
+  SetUserAction(new PrimaryGeneratorAction(hepmcFileName));
   SetUserAction(new RunAction);
   SetUserAction(new EventAction);
 }

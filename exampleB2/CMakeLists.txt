@@ -10,6 +10,9 @@ project(B2a)
 #
 find_package(Geant4 REQUIRED ui_all vis_all)
 
+# Find HepMC3
+find_package(HepMC3 REQUIRED)
+
 #----------------------------------------------------------------------------
 # Locate sources and headers for this project
 # NB: headers are included so they will show up in IDEs
@@ -21,8 +24,8 @@ file(GLOB headers ${PROJECT_SOURCE_DIR}/include/*.hh)
 # Add the executable, use our local headers, and link it to the Geant4 libraries
 #
 add_executable(exampleB2a exampleB2a.cc ${sources} ${headers})
-target_include_directories(exampleB2a PRIVATE include)
-target_link_libraries(exampleB2a PRIVATE ${Geant4_LIBRARIES})
+target_include_directories(exampleB2a PRIVATE include ${HEPMC3_INCLUDE_DIR})
+target_link_libraries(exampleB2a PRIVATE ${Geant4_LIBRARIES} HepMC3::HepMC3)
 
 #----------------------------------------------------------------------------
 # Copy all scripts to the build directory, i.e. the directory in which we

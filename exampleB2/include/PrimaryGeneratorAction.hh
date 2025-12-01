@@ -31,6 +31,15 @@
 #define B2PrimaryGeneratorAction_h 1
 
 #include "G4VUserPrimaryGeneratorAction.hh"
+#include "G4Event.hh"
+#include "G4PrimaryVertex.hh"
+#include "G4PrimaryParticle.hh"
+#include "G4SystemOfUnits.hh"
+
+#include "HepMC3/ReaderAscii.h"
+#include "HepMC3/GenEvent.h"
+#include "HepMC3/GenVertex.h"
+#include "HepMC3/GenParticle.h"
 
 class G4ParticleGun;
 class G4Event;
@@ -48,15 +57,13 @@ namespace B2
 class PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
 {
   public:
-    PrimaryGeneratorAction();
-    ~PrimaryGeneratorAction() override;
+    PrimaryGeneratorAction(const std::string& hepmcFile);
+    ~PrimaryGeneratorAction() override = default;
 
     void GeneratePrimaries(G4Event*) override;
 
-    G4ParticleGun* GetParticleGun() { return fParticleGun; }
-
   private:
-    G4ParticleGun* fParticleGun = nullptr;  // G4 particle gun
+    HepMC3::ReaderAscii hepMCReader;
 };
 
 }  // namespace B2
