@@ -43,6 +43,13 @@ class G4GlobalMagFieldMessenger;
 namespace B2a
 {
 
+struct SiCylinderTracker {
+  G4double innerRadius;
+  G4double outerRadius;
+  G4double length;
+  G4double zPosition;
+};
+
 class DetectorMessenger;
 
 /// Detector construction class to define materials, geometry
@@ -59,8 +66,6 @@ class DetectorConstruction : public G4VUserDetectorConstruction
     void ConstructSDandField() override;
 
     // Set methods
-    void SetTargetMaterial(G4String);
-    void SetChamberMaterial(G4String);
     void SetMaxStep(G4double);
     void SetCheckOverlaps(G4bool);
 
@@ -72,14 +77,8 @@ class DetectorConstruction : public G4VUserDetectorConstruction
     // static data members
     static G4ThreadLocal G4GlobalMagFieldMessenger* fMagFieldMessenger;
     // magnetic field messenger
-    // data members
-    G4int fNbOfChambers = 0;
 
-    G4LogicalVolume* fLogicTarget = nullptr;  // pointer to the logical Target
-    G4LogicalVolume** fLogicChamber = nullptr;  // pointer to the logical Chamber
-
-    G4Material* fTargetMaterial = nullptr;  // pointer to the target  material
-    G4Material* fChamberMaterial = nullptr;  // pointer to the chamber material
+    G4Material* fTrackerMaterial = nullptr;  // pointer to the tracker material
 
     G4UserLimits* fStepLimit = nullptr;  // pointer to user step limits
 
