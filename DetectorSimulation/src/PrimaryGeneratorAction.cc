@@ -28,6 +28,7 @@
 /// \brief Implementation of the B2::PrimaryGeneratorAction class
 
 #include "PrimaryGeneratorAction.hh"
+ 
 
 #include "G4Box.hh"
 #include "G4LogicalVolume.hh"
@@ -37,6 +38,7 @@
 #include "G4SystemOfUnits.hh"
 #include "G4ParticleDefinition.hh"
 #include "G4ios.hh"
+#include "G4RandomDirection.hh"
 
 namespace B2
 {
@@ -52,13 +54,28 @@ PrimaryGeneratorAction::PrimaryGeneratorAction(const std::string& hepmcFile)
                 FatalException,
                 ("Cannot open HepMC file " + hepmcFile).c_str());
   }
+
+  // For testing with single pion gun
+  G4int nofParticles = 1;
+  fParticleGun = new G4ParticleGun(nofParticles);
+
+  G4ParticleDefinition* particleDefinition =
+    G4ParticleTable::GetParticleTable()->FindParticle("pi+");
+
+  fParticleGun->SetParticleDefinition(particleDefinition);
+  fParticleGun->SetParticleEnergy(3.0 * GeV);
+
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void PrimaryGeneratorAction::GeneratePrimaries(G4Event* event)
 {
-  // This function is called at the begining of event
+  // Test: Emit one pion at energy 3 GeV in a random direction from the origin
+  fParticleGun->SetParticleMomentumDirection(G4RandomDirection());
+  fParticleGun->SetParticlePosition(G4ThreeVector(0., 0., 0.));
+  fParticleGun->GeneratePrimaryVertex(event);
+  return;
 
   HepMC3::GenEvent hepmcEvent;
   hepMCReader.read_event(hepmcEvent);
@@ -85,7 +102,7 @@ void PrimaryGeneratorAction::GeneratePrimaries(G4Event* event)
       if (particle->status() != 1) continue;
 
       G4ParticleDefinition* particleDef = particleTable->FindParticle(particle->pid());
-      G4cout << "Emitted " << particleDef->GetParticleName() << " with energy " << particle->momentum().e() * GeV << " GeV" << G4endl;
+      G4cout << "Emitted " << particleDef->GetParticleName() << " with energy " << particle->momentum().e() << " GeV" << G4endl;
 
       auto momentum = particle->momentum();
       auto primary = new G4PrimaryParticle(

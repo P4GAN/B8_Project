@@ -7,7 +7,7 @@
       "command": "bash",
       "args": [
         "-lc",
-        "source /Users/ParkinPham/Programming/geant4-v11.3.2-install/bin/geant4.sh && cmake -S ./exampleB2 -B exampleB2/build -DCMAKE_BUILD_TYPE=Debug && cmake --build exampleB2/build -- -j && echo 'Build finished.'"
+        "source /Users/ParkinPham/Programming/geant4-v11.3.2-install/bin/geant4.sh && cmake -S ./DetectorSimulation -B DetectorSimulation/build -DCMAKE_BUILD_TYPE=Debug && cmake --build DetectorSimulation/build -- -j && echo 'Build finished.'"
       ],
       "group": { "kind": "build", "isDefault": true },
       "presentation": { "echo": true, "reveal": "always", "panel": "shared" },
@@ -19,10 +19,10 @@
       "command": "/bin/bash",
       "args": [
         "-lc",
-        "g++ -o examplePythia examplePythia.cpp $(/Users/parkinpham/Programming/pythia8316/bin/pythia8-config --cxxflags --libs --hepmc3) && ./examplePythia"
+        "g++ -o CollisionSimulation CollisionSimulation.cpp $(/Users/parkinpham/Programming/pythia8316/bin/pythia8-config --cxxflags --libs --hepmc3) && ./CollisionSimulation"
       ],
       "options": {
-        "cwd": "${workspaceFolder}/examplePythia"
+        "cwd": "${workspaceFolder}/CollisionSimulation"
       },
       "problemMatcher": "$gcc",
       "group": {

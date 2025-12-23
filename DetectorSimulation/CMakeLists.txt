@@ -23,18 +23,18 @@ file(GLOB headers ${PROJECT_SOURCE_DIR}/include/*.hh)
 #----------------------------------------------------------------------------
 # Add the executable, use our local headers, and link it to the Geant4 libraries
 #
-add_executable(exampleB2a exampleB2a.cc ${sources} ${headers})
-target_include_directories(exampleB2a PRIVATE include ${HEPMC3_INCLUDE_DIR})
-target_link_libraries(exampleB2a PRIVATE ${Geant4_LIBRARIES} HepMC3::HepMC3)
+add_executable(DetectorSimulation DetectorSimulation.cc ${sources} ${headers})
+target_include_directories(DetectorSimulation PRIVATE include ${HEPMC3_INCLUDE_DIR})
+target_link_libraries(DetectorSimulation PRIVATE ${Geant4_LIBRARIES} HepMC3::HepMC3)
 
 #----------------------------------------------------------------------------
 # Copy all scripts to the build directory, i.e. the directory in which we
 # build B2a. This is so that we can run the executable directly because it
 # relies on these scripts being in the current working directory.
 #
-set(EXAMPLEB2A_SCRIPTS
-  exampleB2a.out
-  exampleB2.in
+set(DetectorSimulation_SCRIPTS
+  DetectorSimulation.out
+  DetectorSimulation.in
   gui.mac
   run1.mac
   run2.mac
@@ -42,7 +42,7 @@ set(EXAMPLEB2A_SCRIPTS
   vis.mac
   )
 
-foreach(_script ${EXAMPLEB2A_SCRIPTS})
+foreach(_script ${DetectorSimulation_SCRIPTS})
   configure_file(
     ${PROJECT_SOURCE_DIR}/${_script}
     ${PROJECT_BINARY_DIR}/${_script}

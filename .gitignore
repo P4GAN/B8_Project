@@ -2,5 +2,5 @@
 /build
 
 
-/exampleB2/build
-/exampleB2/G4History.macro
+/DetectorSimulation/build
+/DetectorSimulation/G4History.macro

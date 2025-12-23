@@ -54,6 +54,11 @@ namespace B2
 /// can be changed via the G4 build-in commands of G4ParticleGun class
 /// (see the macros provided with this example).
 
+enum class GeneratorMode {
+  HepMCFile,
+  SingleParticle
+};
+
 class PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
 {
   public:
@@ -64,6 +69,7 @@ class PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
 
   private:
     HepMC3::ReaderAscii hepMCReader;
+    G4ParticleGun* fParticleGun = nullptr;  // G4 particle gun
 };
 
 }  // namespace B2

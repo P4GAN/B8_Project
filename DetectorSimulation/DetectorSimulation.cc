@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-/// \file exampleB2a.cc
+/// \file DetectorSimulation.cc
 /// \brief Main program of the B2a example
 
 #include "ActionInitialization.hh"
