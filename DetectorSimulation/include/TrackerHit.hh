@@ -22,10 +22,6 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-//
-//
-/// \file B2/B2a/include/TrackerHit.hh
-/// \brief Definition of the B2::TrackerHit class
 
 #ifndef B2TrackerHit_h
 #define B2TrackerHit_h 1
@@ -36,9 +32,6 @@
 #include "G4ThreeVector.hh"
 #include "G4VHit.hh"
 
-namespace B2
-{
-
 /// Tracker hit class
 ///
 /// It defines data members to store the trackID, chamberNb, energy deposit,
@@ -47,17 +40,17 @@ namespace B2
 
 class TrackerHit : public G4VHit
 {
-  public:
+public:
     TrackerHit() = default;
-    TrackerHit(const TrackerHit&) = default;
+    TrackerHit(const TrackerHit &) = default;
     ~TrackerHit() override = default;
 
     // operators
-    TrackerHit& operator=(const TrackerHit&) = default;
-    G4bool operator==(const TrackerHit&) const;
+    TrackerHit &operator=(const TrackerHit &) = default;
+    G4bool operator==(const TrackerHit &) const;
 
-    inline void* operator new(size_t);
-    inline void operator delete(void*);
+    inline void *operator new(size_t);
+    inline void operator delete(void *);
 
     // methods from base class
     void Draw() override;
@@ -75,36 +68,27 @@ class TrackerHit : public G4VHit
     G4double GetEdep() const { return fEdep; };
     G4ThreeVector GetPos() const { return fPos; };
 
-  private:
+private:
     G4int fTrackID = -1;
     G4int fChamberNb = -1;
     G4double fEdep = 0.;
     G4ThreeVector fPos;
 };
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
 using TrackerHitsCollection = G4THitsCollection<TrackerHit>;
 
-extern G4ThreadLocal G4Allocator<TrackerHit>* TrackerHitAllocator;
+extern G4ThreadLocal G4Allocator<TrackerHit> *TrackerHitAllocator;
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-inline void* TrackerHit::operator new(size_t)
+inline void *TrackerHit::operator new(size_t)
 {
-  if (!TrackerHitAllocator) TrackerHitAllocator = new G4Allocator<TrackerHit>;
-  return (void*)TrackerHitAllocator->MallocSingle();
+    if (!TrackerHitAllocator)
+        TrackerHitAllocator = new G4Allocator<TrackerHit>;
+    return (void *)TrackerHitAllocator->MallocSingle();
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-inline void TrackerHit::operator delete(void* hit)
+inline void TrackerHit::operator delete(void *hit)
 {
-  TrackerHitAllocator->FreeSingle((TrackerHit*)hit);
+    TrackerHitAllocator->FreeSingle((TrackerHit *)hit);
 }
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-}  // namespace B2
 
 #endif

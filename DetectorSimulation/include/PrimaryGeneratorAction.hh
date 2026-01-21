@@ -22,10 +22,6 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-//
-//
-/// \file B2/B2a/include/PrimaryGeneratorAction.hh
-/// \brief Definition of the B2::PrimaryGeneratorAction class
 
 #ifndef B2PrimaryGeneratorAction_h
 #define B2PrimaryGeneratorAction_h 1
@@ -44,9 +40,6 @@
 class G4ParticleGun;
 class G4Event;
 
-namespace B2
-{
-
 /// The primary generator action class with particle gum.
 ///
 /// It defines a single particle which hits the Tracker
@@ -54,24 +47,23 @@ namespace B2
 /// can be changed via the G4 build-in commands of G4ParticleGun class
 /// (see the macros provided with this example).
 
-enum class GeneratorMode {
-  HepMCFile,
-  SingleParticle
+enum class GeneratorMode
+{
+    HepMCFile,
+    SingleParticle
 };
 
 class PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
 {
-  public:
-    PrimaryGeneratorAction(const std::string& hepmcFile);
+public:
+    PrimaryGeneratorAction(const std::string &hepmcFile);
     ~PrimaryGeneratorAction() override = default;
 
-    void GeneratePrimaries(G4Event*) override;
+    void GeneratePrimaries(G4Event *) override;
 
-  private:
+private:
     HepMC3::ReaderAscii hepMCReader;
-    G4ParticleGun* fParticleGun = nullptr;  // G4 particle gun
+    G4ParticleGun *fParticleGun = nullptr;
 };
-
-}  // namespace B2
 
 #endif

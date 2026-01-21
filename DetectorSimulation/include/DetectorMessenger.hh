@@ -22,10 +22,6 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-//
-//
-/// \file B2/B2a/include/DetectorMessenger.hh
-/// \brief Definition of the B2a::DetectorMessenger class
 
 #ifndef B2aDetectorMessenger_h
 #define B2aDetectorMessenger_h 1
@@ -36,9 +32,6 @@ class G4UIdirectory;
 class G4UIcmdWithAString;
 class G4UIcmdWithADoubleAndUnit;
 class G4UIcommand;
-
-namespace B2a
-{
 
 class DetectorConstruction;
 
@@ -51,24 +44,22 @@ class DetectorConstruction;
 
 class DetectorMessenger : public G4UImessenger
 {
-  public:
-    DetectorMessenger(DetectorConstruction*);
+public:
+    DetectorMessenger(DetectorConstruction *);
     ~DetectorMessenger() override;
 
-    void SetNewValue(G4UIcommand*, G4String) override;
+    void SetNewValue(G4UIcommand *, G4String) override;
 
-  private:
-    DetectorConstruction* fDetectorConstruction = nullptr;
+private:
+    DetectorConstruction *fDetectorConstruction = nullptr;
 
-    G4UIdirectory* fDirectory = nullptr;
-    G4UIdirectory* fDetDirectory = nullptr;
+    G4UIdirectory *fDirectory = nullptr;
+    G4UIdirectory *fDetDirectory = nullptr;
 
-    G4UIcmdWithAString* fTargMatCmd = nullptr;
-    G4UIcmdWithAString* fChamMatCmd = nullptr;
+    G4UIcmdWithAString *fTargMatCmd = nullptr;
+    G4UIcmdWithAString *fChamMatCmd = nullptr;
 
-    G4UIcmdWithADoubleAndUnit* fStepMaxCmd = nullptr;
+    G4UIcmdWithADoubleAndUnit *fStepMaxCmd = nullptr;
 };
-
-}  // namespace B2a
 
 #endif

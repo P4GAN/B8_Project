@@ -2,7 +2,7 @@
 # Setup the project
 #
 cmake_minimum_required(VERSION 3.16...3.27)
-project(B2a)
+project(DetectorSimulation)
 
 #----------------------------------------------------------------------------
 # Find Geant4 package, activating all available UI and Vis drivers by default
@@ -29,23 +29,23 @@ target_link_libraries(DetectorSimulation PRIVATE ${Geant4_LIBRARIES} HepMC3::Hep
 
 #----------------------------------------------------------------------------
 # Copy all scripts to the build directory, i.e. the directory in which we
-# build B2a. This is so that we can run the executable directly because it
+# build. This is so that we can run the executable directly because it
 # relies on these scripts being in the current working directory.
 #
 set(DetectorSimulation_SCRIPTS
-  DetectorSimulation.out
-  DetectorSimulation.in
-  gui.mac
-  run1.mac
-  run2.mac
-  init_vis.mac
-  vis.mac
-  )
+    DetectorSimulation.out
+    DetectorSimulation.in
+    gui.mac
+    run1.mac
+    run2.mac
+    init_vis.mac
+    vis.mac
+    )
 
 foreach(_script ${DetectorSimulation_SCRIPTS})
-  configure_file(
-    ${PROJECT_SOURCE_DIR}/${_script}
-    ${PROJECT_BINARY_DIR}/${_script}
-    COPYONLY
+    configure_file(
+        ${PROJECT_SOURCE_DIR}/${_script}
+        ${PROJECT_BINARY_DIR}/${_script}
+        COPYONLY
     )
 endforeach()

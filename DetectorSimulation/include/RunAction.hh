@@ -22,10 +22,6 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-//
-//
-/// \file B2/B2a/include/RunAction.hh
-/// \brief Definition of the B2::RunAction class
 
 #ifndef B2RunAction_h
 #define B2RunAction_h 1
@@ -34,21 +30,16 @@
 
 class G4Run;
 
-namespace B2
-{
-
 /// Run action class
 
 class RunAction : public G4UserRunAction
 {
-  public:
+public:
     RunAction();
     ~RunAction() override = default;
 
-    void BeginOfRunAction(const G4Run* run) override;
-    void EndOfRunAction(const G4Run* run) override;
+    void BeginOfRunAction(const G4Run *run) override;
+    void EndOfRunAction(const G4Run *run) override;
 };
-
-}  // namespace B2
 
 #endif

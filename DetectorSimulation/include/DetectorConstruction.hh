@@ -22,10 +22,6 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-//
-//
-/// \file B2/B2a/include/DetectorConstruction.hh
-/// \brief Definition of the B2a::DetectorConstruction class
 
 #ifndef B2aDetectorConstruction_h
 #define B2aDetectorConstruction_h 1
@@ -40,14 +36,12 @@ class G4Material;
 class G4UserLimits;
 class G4GlobalMagFieldMessenger;
 
-namespace B2a
+struct SiCylinderTracker
 {
-
-struct SiCylinderTracker {
-  G4double innerRadius;
-  G4double outerRadius;
-  G4double length;
-  G4double zPosition;
+    G4double innerRadius;
+    G4double outerRadius;
+    G4double length;
+    G4double zPosition;
 };
 
 class DetectorMessenger;
@@ -57,36 +51,24 @@ class DetectorMessenger;
 
 class DetectorConstruction : public G4VUserDetectorConstruction
 {
-  public:
+public:
     DetectorConstruction();
     ~DetectorConstruction() override;
 
-  public:
-    G4VPhysicalVolume* Construct() override;
+public:
+    G4VPhysicalVolume *Construct() override;
     void ConstructSDandField() override;
 
-    // Set methods
-    void SetMaxStep(G4double);
-    void SetCheckOverlaps(G4bool);
-
-  private:
+private:
     // methods
     void DefineMaterials();
-    G4VPhysicalVolume* DefineVolumes();
+    G4VPhysicalVolume *DefineVolumes();
 
     // static data members
-    static G4ThreadLocal G4GlobalMagFieldMessenger* fMagFieldMessenger;
+    static G4ThreadLocal G4GlobalMagFieldMessenger *fMagFieldMessenger;
     // magnetic field messenger
 
-    G4Material* fTrackerMaterial = nullptr;  // pointer to the tracker material
-
-    G4UserLimits* fStepLimit = nullptr;  // pointer to user step limits
-
-    DetectorMessenger* fMessenger = nullptr;  // messenger
-
-    G4bool fCheckOverlaps = true;  // option to activate checking of volumes overlaps
+    G4Material *fTrackerMaterial = nullptr; // pointer to the tracker material
 };
-
-}  // namespace B2a
 
 #endif

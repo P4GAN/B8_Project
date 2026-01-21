@@ -22,31 +22,20 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-//
-//
-/// \file B2/B2a/include/ActionInitialization.hh
-/// \brief Definition of the B2::ActionInitialization class
 
 #ifndef B2ActionInitialization_h
 #define B2ActionInitialization_h 1
 
 #include "G4VUserActionInitialization.hh"
 
-namespace B2
-{
-
-/// Action initialization class.
-
 class ActionInitialization : public G4VUserActionInitialization
 {
-  public:
+public:
     ActionInitialization() = default;
     ~ActionInitialization() override = default;
 
     void BuildForMaster() const override;
     void Build() const override;
 };
-
-}  // namespace B2
 
 #endif

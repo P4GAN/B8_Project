@@ -33,27 +33,16 @@
 #include "PrimaryGeneratorAction.hh"
 #include "RunAction.hh"
 
-namespace B2
-{
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
 void ActionInitialization::BuildForMaster() const
 {
-  SetUserAction(new RunAction);
+    SetUserAction(new RunAction);
 }
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void ActionInitialization::Build() const
 {
-  std::string hepmcFileName = "../electron_proton.hepmc";
+    std::string hepmcFileName = "../electron_proton.hepmc";
 
-  SetUserAction(new PrimaryGeneratorAction(hepmcFileName));
-  SetUserAction(new RunAction);
-  SetUserAction(new EventAction);
+    SetUserAction(new PrimaryGeneratorAction(hepmcFileName));
+    SetUserAction(new RunAction);
+    SetUserAction(new EventAction);
 }
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-}  // namespace B2

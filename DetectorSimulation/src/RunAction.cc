@@ -29,31 +29,46 @@
 
 #include "RunAction.hh"
 
+#include "G4Run.hh"
 #include "G4RunManager.hh"
-
-namespace B2
-{
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+#include "G4AnalysisManager.hh"
+#include "G4SystemOfUnits.hh"
 
 RunAction::RunAction()
 {
-  // set printing event number per each 100 events
-  G4RunManager::GetRunManager()->SetPrintProgress(1000);
+    // set printing event number per each 100 events
+    G4RunManager::GetRunManager()->SetPrintProgress(1000);
+
+    // Create analysis manager and set up ntuple for hits
+    auto analysisManager = G4AnalysisManager::Instance();
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-void RunAction::BeginOfRunAction(const G4Run*)
+void RunAction::BeginOfRunAction(const G4Run *run)
 {
-  // inform the runManager to save random number seed
-  G4RunManager::GetRunManager()->SetRandomNumberStore(false);
+    // inform the runManager to save random number seed
+    G4RunManager::GetRunManager()->SetRandomNumberStore(false);
+
+    auto analysisManager = G4AnalysisManager::Instance();
+    std::string runnumber = std::to_string(run->GetRunID());
+    G4String fileName = "Run" + runnumber + ".root";
+    analysisManager->OpenFile(fileName);
+
+    // Creating ntuple
+    analysisManager->CreateNtuple("hits", "Energy deposit and position");
+    analysisManager->CreateNtupleDColumn("Energy");
+    analysisManager->CreateNtupleDColumn("PositionX");
+    analysisManager->CreateNtupleDColumn("PositionY");
+    analysisManager->CreateNtupleDColumn("PositionZ");
+    analysisManager->CreateNtupleDColumn("Time");
+    analysisManager->CreateNtupleIColumn("TrackID");
+    analysisManager->CreateNtupleIColumn("ChamberID");
+
+    analysisManager->FinishNtuple();
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-void RunAction::EndOfRunAction(const G4Run*) {}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-}  // namespace B2
+void RunAction::EndOfRunAction(const G4Run *)
+{
+    auto analysisManager = G4AnalysisManager::Instance();
+    analysisManager->Write();
+    analysisManager->CloseFile();
+}

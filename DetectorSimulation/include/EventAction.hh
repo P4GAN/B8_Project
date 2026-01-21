@@ -22,10 +22,6 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-//
-//
-/// \file B2/B2a/include/EventAction.hh
-/// \brief Definition of the B2::EventAction class
 
 #ifndef B2EventAction_h
 #define B2EventAction_h 1
@@ -34,21 +30,16 @@
 
 class G4Event;
 
-namespace B2
-{
-
 /// Event action class
 
 class EventAction : public G4UserEventAction
 {
-  public:
+public:
     EventAction() = default;
     ~EventAction() override = default;
 
-    void BeginOfEventAction(const G4Event*) override;
-    void EndOfEventAction(const G4Event*) override;
+    void BeginOfEventAction(const G4Event *) override;
+    void EndOfEventAction(const G4Event *) override;
 };
-
-}  // namespace B2
 
 #endif
