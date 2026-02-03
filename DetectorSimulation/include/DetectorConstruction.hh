@@ -36,14 +36,6 @@ class G4Material;
 class G4UserLimits;
 class G4GlobalMagFieldMessenger;
 
-struct SiCylinderTracker
-{
-    G4double innerRadius;
-    G4double outerRadius;
-    G4double length;
-    G4double zPosition;
-};
-
 class DetectorMessenger;
 
 /// Detector construction class to define materials, geometry

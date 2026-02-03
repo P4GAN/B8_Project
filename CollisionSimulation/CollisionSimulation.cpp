@@ -13,8 +13,8 @@ int main() {
     pythia.readString("Beams:idA = 2212");      // Proton
     pythia.readString("Beams:idB = 11");        // Electron
     pythia.readString("Beams:frameType = 2");
-    pythia.readString("Beams:eA = 275");
-    pythia.readString("Beams:eB = 18");
+    pythia.readString("Beams:eA = 275");        // Proton beam energy
+    pythia.readString("Beams:eB = 18");         // Electron beam energy
     pythia.readString("WeakBosonExchange:ff2ff(t:gmZ) = on");
     pythia.readString("SpaceShower:dipoleRecoil = on");
     pythia.readString("PhaseSpace:Q2min = 100");

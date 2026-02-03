@@ -87,73 +87,32 @@ G4VPhysicalVolume *DetectorConstruction::DefineVolumes()
     G4double worldRadius = 1 * m;
     G4double worldLength = 3 * m;
 
-    std::vector<SiCylinderTracker> trackerBarrels = {
-        {3.6 * cm,
-         4.1 * cm,
-         27.0 * cm,
-         0.0 * cm},
-        {4.8 * cm,
-         5.3 * cm,
-         27.0 * cm,
-         0.0 * cm},
-        {12.0 * cm,
-         12.5 * cm,
-         27.0 * cm,
-         0.0 * cm},
-        {27.0 * cm,
-         27.5 * cm,
-         54.0 * cm,
-         0.0 * cm},
-        {42.0 * cm,
-         42.5 * cm,
-         80.0 * cm,
-         0.0 * cm},
+    G4double siliconThickness = 50 * um;
+    int numTrackerBarrels = 5;
+    int numTrackerDiscs = 10;
+
+    std::vector<G4double> trackerBarrelRadii = {
+        3.8 * cm, 5.0 * cm, 12.2 * cm, 27.2 * cm, 42.2 * cm
     };
 
-    std::vector<SiCylinderTracker> trackerDiscs = {
-        {3.676 * cm,
-         23.0 * cm,
-         2.5 * cm,
-         25.0 * cm},
-        {3.676 * cm,
-         43.0 * cm,
-         2.5 * cm,
-         45.0 * cm},
-        {3.842 * cm,
-         43.0 * cm,
-         2.5 * cm,
-         70.0 * cm},
-        {5.443 * cm,
-         43.0 * cm,
-         2.5 * cm,
-         100.0 * cm},
-        {7.014 * cm,
-         43.0 * cm,
-         2.5 * cm,
-         135.0 * cm},
-        {3.676 * cm,
-         23.0 * cm,
-         2.5 * cm,
-         -25.0 * cm},
-        {3.676 * cm,
-         43.0 * cm,
-         2.5 * cm,
-         -45.0 * cm},
-        {3.676 * cm,
-         43.0 * cm,
-         2.5 * cm,
-         -65.0 * cm},
-        {4.006 * cm,
-         43.0 * cm,
-         2.5 * cm,
-         -85.0 * cm},
-        {4.635 * cm,
-         43.0 * cm,
-         2.5 * cm,
-         -105.0 * cm},
+    std::vector<G4double> trackerBarrelLengths = {
+        27.0 * cm, 27.0 * cm, 27.0 * cm, 54.0 * cm, 80.0 * cm
     };
 
-    // Definitions of Solids, Logical Volumes, Physical Volumes
+    std::vector<G4double> trackerDiscZPositions = {
+        25.0 * cm, 45.0 * cm, 70.0 * cm, 100.0 * cm, 135.0 * cm,
+        -25.0 * cm, -45.0 * cm, -65.0 * cm, -85.0 * cm, -105.0 * cm
+    };
+
+    std::vector<G4double> trackerDiscInnerRadii = {
+        3.676 * cm, 3.676 * cm, 3.842 * cm, 5.443 * cm, 7.014 * cm,
+        3.676 * cm, 3.676 * cm, 3.676 * cm, 4.006 * cm, 4.635 * cm
+    };
+
+    std::vector<G4double> trackerDiscOuterRadii = {
+        23.0 * cm, 43.0 * cm, 43.0 * cm, 43.0 * cm, 43.0 * cm,
+        23.0 * cm, 43.0 * cm, 43.0 * cm, 43.0 * cm, 43.0 * cm
+    };
 
     // World
     G4GeometryManager::GetInstance()->SetWorldMaximumExtent(worldLength);
@@ -188,14 +147,12 @@ G4VPhysicalVolume *DetectorConstruction::DefineVolumes()
     worldLV->SetVisAttributes(worldVisAtt);
 
     // Tracker barrel segments
-    for (int i = 0; i < trackerBarrels.size(); i++)
+    for (int i = 0; i < numTrackerBarrels; i++)
     {
-        SiCylinderTracker tracker = trackerBarrels[i];
-
         auto trackerBarrelShape = new G4Tubs("TrackerBarrel_Solid",
-                                             tracker.innerRadius,
-                                             tracker.outerRadius,
-                                             tracker.length / 2,
+                                             trackerBarrelRadii[i] - siliconThickness / 2,
+                                             trackerBarrelRadii[i] + siliconThickness / 2,
+                                             trackerBarrelLengths[i] / 2,
                                              0. * deg,
                                              360. * deg);
 
@@ -205,7 +162,7 @@ G4VPhysicalVolume *DetectorConstruction::DefineVolumes()
         trackerBarrelLV->SetVisAttributes(trackerVisAtt);
 
         new G4PVPlacement(nullptr,
-                          G4ThreeVector(0, 0, tracker.zPosition),
+                          G4ThreeVector(0, 0, 0),
                           trackerBarrelLV,
                           "TrackerBarrel_PV",
                           worldLV,
@@ -215,14 +172,12 @@ G4VPhysicalVolume *DetectorConstruction::DefineVolumes()
     }
 
     // Tracker disc segments
-    for (int i = 0; i < trackerDiscs.size(); i++)
+    for (int i = 0; i < numTrackerDiscs; i++)
     {
-        SiCylinderTracker tracker = trackerDiscs[i];
-
         auto trackerDiscShape = new G4Tubs("TrackerDisc_Solid",
-                                           tracker.innerRadius,
-                                           tracker.outerRadius,
-                                           tracker.length / 2,
+                                           trackerDiscInnerRadii[i],
+                                           trackerDiscOuterRadii[i],
+                                           siliconThickness / 2,
                                            0. * deg,
                                            360. * deg);
 
@@ -232,7 +187,7 @@ G4VPhysicalVolume *DetectorConstruction::DefineVolumes()
         trackerDiscLV->SetVisAttributes(trackerVisAtt);
 
         new G4PVPlacement(nullptr,
-                          G4ThreeVector(0, 0, tracker.zPosition),
+                          G4ThreeVector(0, 0, trackerDiscZPositions[i]),
                           trackerDiscLV,
                           "TrackerDisc_PV",
                           worldLV,
@@ -261,7 +216,7 @@ void DetectorConstruction::ConstructSDandField()
     // Create global magnetic field messenger.
     // Uniform magnetic field is then created automatically if
     // the field value is not zero.
-    G4ThreeVector fieldValue = G4ThreeVector(1.7 * tesla, 0., 0.);
+    G4ThreeVector fieldValue = G4ThreeVector(0., 0., 1.7 * tesla);
     fMagFieldMessenger = new G4GlobalMagFieldMessenger(fieldValue);
     fMagFieldMessenger->SetVerboseLevel(1);
 
