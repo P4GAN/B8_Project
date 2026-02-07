@@ -22,41 +22,16 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-//
-//
 
-#ifndef B2TrackerSD_h
-#define B2TrackerSD_h 1
+#pragma once
+#include "TrackingAction.hh"
 
-#include "TrackerHit.hh"
+#include "G4UserTrackingAction.hh"
 
-#include "G4VSensitiveDetector.hh"
-
-#include <vector>
-
-class G4Step;
-class G4HCofThisEvent;
-
-/// Tracker sensitive detector class
-///
-/// The hits are accounted in hits in ProcessHits() function which is called
-/// by Geant4 kernel at each step. A hit is created with each step with non zero
-/// energy deposit.
-
-class TrackerSD : public G4VSensitiveDetector
-{
+class TrackingAction : public G4UserTrackingAction {
 public:
-    TrackerSD(const G4String &name, const G4String &hitsCollectionName);
-    ~TrackerSD() override = default;
+  TrackingAction() = default;
+  virtual ~TrackingAction() = default;
 
-    // methods from base class
-    void Initialize(G4HCofThisEvent *hitCollection) override;
-    G4bool ProcessHits(G4Step *step, G4TouchableHistory *history) override;
-    void EndOfEvent(G4HCofThisEvent *hitCollection) override;
-
-private:
-    TrackerHitsCollection *fHitsCollection = nullptr;
-    G4ThreeVector GetSmearedPosition(const TrackerHit &hit);
+  void PreUserTrackingAction(const G4Track* track) override;
 };
-
-#endif

@@ -44,23 +44,15 @@ class DetectorMessenger;
 class DetectorConstruction : public G4VUserDetectorConstruction
 {
 public:
-    DetectorConstruction();
-    ~DetectorConstruction() override;
+    DetectorConstruction() = default;
+    ~DetectorConstruction() = default;
 
 public:
     G4VPhysicalVolume *Construct() override;
     void ConstructSDandField() override;
 
 private:
-    // methods
-    void DefineMaterials();
-    G4VPhysicalVolume *DefineVolumes();
-
-    // static data members
-    static G4ThreadLocal G4GlobalMagFieldMessenger *fMagFieldMessenger;
-    // magnetic field messenger
-
-    G4Material *fTrackerMaterial = nullptr; // pointer to the tracker material
+    std::vector<G4LogicalVolume*> trackerLogicalVolumes;
 };
 
 #endif

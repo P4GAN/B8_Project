@@ -1,4 +1,3 @@
-//
 // ********************************************************************
 // * License and Disclaimer                                           *
 // *                                                                  *
@@ -22,41 +21,34 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-//
-//
 
-#ifndef B2TrackerSD_h
-#define B2TrackerSD_h 1
+#include "TrackingAction.hh"
 
-#include "TrackerHit.hh"
+#include "G4UserTrackingAction.hh"
+#include "G4AnalysisManager.hh"
+#include "G4Track.hh"
+#include "G4EventManager.hh"
+#include "G4Event.hh"
 
-#include "G4VSensitiveDetector.hh"
-
-#include <vector>
-
-class G4Step;
-class G4HCofThisEvent;
-
-/// Tracker sensitive detector class
-///
-/// The hits are accounted in hits in ProcessHits() function which is called
-/// by Geant4 kernel at each step. A hit is created with each step with non zero
-/// energy deposit.
-
-class TrackerSD : public G4VSensitiveDetector
+void TrackingAction::PreUserTrackingAction(const G4Track* track)
 {
-public:
-    TrackerSD(const G4String &name, const G4String &hitsCollectionName);
-    ~TrackerSD() override = default;
+    if (track->GetParentID() != 0) return;
 
-    // methods from base class
-    void Initialize(G4HCofThisEvent *hitCollection) override;
-    G4bool ProcessHits(G4Step *step, G4TouchableHistory *history) override;
-    void EndOfEvent(G4HCofThisEvent *hitCollection) override;
+    int trackID = track->GetTrackID();
+    auto pos = track->GetVertexPosition();
+    auto mom = track->GetMomentum();
 
-private:
-    TrackerHitsCollection *fHitsCollection = nullptr;
-    G4ThreeVector GetSmearedPosition(const TrackerHit &hit);
-};
+    // Fill track ntuple with vertex and momentum information
+    auto analysisManager = G4AnalysisManager::Instance();
 
-#endif
+    analysisManager->FillNtupleDColumn(1, 0, pos.x());
+    analysisManager->FillNtupleDColumn(1, 1, pos.y());
+    analysisManager->FillNtupleDColumn(1, 2, pos.z());
+    analysisManager->FillNtupleDColumn(1, 3, mom.x());
+    analysisManager->FillNtupleDColumn(1, 4, mom.y());
+    analysisManager->FillNtupleDColumn(1, 5, mom.z());
+    analysisManager->FillNtupleDColumn(1, 6, track->GetDynamicParticle()->GetCharge());
+    analysisManager->FillNtupleIColumn(1, 7, track->GetDynamicParticle()->GetPDGcode());
+    analysisManager->FillNtupleIColumn(1, 8, track->GetTrackID());
+    analysisManager->AddNtupleRow(1);
+}

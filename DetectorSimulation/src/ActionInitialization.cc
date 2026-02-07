@@ -32,6 +32,7 @@
 #include "EventAction.hh"
 #include "PrimaryGeneratorAction.hh"
 #include "RunAction.hh"
+#include "TrackingAction.hh"
 
 void ActionInitialization::BuildForMaster() const
 {
@@ -45,4 +46,5 @@ void ActionInitialization::Build() const
     SetUserAction(new PrimaryGeneratorAction(hepmcFileName));
     SetUserAction(new RunAction);
     SetUserAction(new EventAction);
+    SetUserAction(new TrackingAction);
 }

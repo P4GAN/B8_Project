@@ -29,6 +29,9 @@
 
 #include "RunAction.hh"
 
+#include <chrono>
+#include <format>
+
 #include "G4Run.hh"
 #include "G4RunManager.hh"
 #include "G4AnalysisManager.hh"
@@ -49,21 +52,34 @@ void RunAction::BeginOfRunAction(const G4Run *run)
     G4RunManager::GetRunManager()->SetRandomNumberStore(false);
 
     auto analysisManager = G4AnalysisManager::Instance();
-    std::string runnumber = std::to_string(run->GetRunID());
-    G4String fileName = "Run" + runnumber + ".root";
+    // Create unique file name based on system timestamp
+    auto now = std::chrono::system_clock::now();
+    std::string s = std::format("{:%Y%m%d%H%M%S}", now);
+    std::string fileName = "output/run_" + s + ".root";
     analysisManager->OpenFile(fileName);
 
-    // Creating ntuple
+    // Create ntuple for hits
     analysisManager->CreateNtuple("hits", "Energy deposit and position");
     analysisManager->CreateNtupleDColumn("Energy");
     analysisManager->CreateNtupleDColumn("PositionX");
     analysisManager->CreateNtupleDColumn("PositionY");
     analysisManager->CreateNtupleDColumn("PositionZ");
-    analysisManager->CreateNtupleDColumn("Time");
     analysisManager->CreateNtupleIColumn("TrackID");
-    analysisManager->CreateNtupleIColumn("ChamberID");
-
     analysisManager->FinishNtuple();
+
+    // Create ntuple for tracks
+    analysisManager->CreateNtuple("tracks", "Track parameters");
+    analysisManager->CreateNtupleDColumn("VertexPositionX");
+    analysisManager->CreateNtupleDColumn("VertexPositionY");
+    analysisManager->CreateNtupleDColumn("VertexPositionZ");
+    analysisManager->CreateNtupleDColumn("MomentumX");
+    analysisManager->CreateNtupleDColumn("MomentumY");
+    analysisManager->CreateNtupleDColumn("MomentumZ");
+    analysisManager->CreateNtupleDColumn("Charge");
+    analysisManager->CreateNtupleIColumn("ParticleID");
+    analysisManager->CreateNtupleIColumn("TrackID");
+    analysisManager->FinishNtuple();
+
 }
 
 void RunAction::EndOfRunAction(const G4Run *)

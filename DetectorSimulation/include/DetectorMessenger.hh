@@ -39,7 +39,6 @@ class DetectorConstruction;
 ///
 /// It implements commands:
 /// - /B2/det/setTargetMaterial name
-/// - /B2/det/setChamberMaterial name
 /// - /B2/det/stepMax value unit
 
 class DetectorMessenger : public G4UImessenger

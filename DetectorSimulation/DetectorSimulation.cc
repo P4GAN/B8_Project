@@ -33,7 +33,6 @@
 #include "G4UIExecutive.hh"
 #include "G4UImanager.hh"
 #include "G4VisExecutive.hh"
-// #include "Randomize.hh"
 
 int main(int argc, char **argv)
 {

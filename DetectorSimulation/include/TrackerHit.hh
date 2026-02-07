@@ -34,9 +34,9 @@
 
 /// Tracker hit class
 ///
-/// It defines data members to store the trackID, chamberNb, energy deposit,
+/// It defines data members to store the trackID, energy deposit,
 /// and position of charged particles in a selected volume:
-/// - fTrackID, fChamberNB, fEdep, fPos
+/// - fTrackID, fEdep, fPos
 
 class TrackerHit : public G4VHit
 {
@@ -45,10 +45,6 @@ public:
     TrackerHit(const TrackerHit &) = default;
     ~TrackerHit() override = default;
 
-    // operators
-    TrackerHit &operator=(const TrackerHit &) = default;
-    G4bool operator==(const TrackerHit &) const;
-
     inline void *operator new(size_t);
     inline void operator delete(void *);
 
@@ -56,23 +52,13 @@ public:
     void Draw() override;
     void Print() override;
 
-    // Set methods
-    void SetTrackID(G4int track) { fTrackID = track; };
-    void SetChamberNb(G4int chamb) { fChamberNb = chamb; };
-    void SetEdep(G4double de) { fEdep = de; };
-    void SetPos(G4ThreeVector xyz) { fPos = xyz; };
-
-    // Get methods
-    G4int GetTrackID() const { return fTrackID; };
-    G4int GetChamberNb() const { return fChamberNb; };
-    G4double GetEdep() const { return fEdep; };
-    G4ThreeVector GetPos() const { return fPos; };
-
-private:
-    G4int fTrackID = -1;
-    G4int fChamberNb = -1;
-    G4double fEdep = 0.;
-    G4ThreeVector fPos;
+    G4int trackID = -1;
+    G4int pdg = 0;
+    G4int detectorID = -1;
+    G4double time = 0;
+    G4double edep = 0.;
+    G4ThreeVector pos;
+    G4ThreeVector momentum;
 };
 
 using TrackerHitsCollection = G4THitsCollection<TrackerHit>;
