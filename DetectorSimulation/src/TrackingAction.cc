@@ -35,6 +35,7 @@ void TrackingAction::PreUserTrackingAction(const G4Track* track)
     if (track->GetParentID() != 0) return;
 
     int trackID = track->GetTrackID();
+    int eventID = G4EventManager::GetEventManager()->GetConstCurrentEvent()->GetEventID();
     auto pos = track->GetVertexPosition();
     auto mom = track->GetMomentum();
 
@@ -49,6 +50,7 @@ void TrackingAction::PreUserTrackingAction(const G4Track* track)
     analysisManager->FillNtupleDColumn(1, 5, mom.z());
     analysisManager->FillNtupleDColumn(1, 6, track->GetDynamicParticle()->GetCharge());
     analysisManager->FillNtupleIColumn(1, 7, track->GetDynamicParticle()->GetPDGcode());
-    analysisManager->FillNtupleIColumn(1, 8, track->GetTrackID());
+    analysisManager->FillNtupleIColumn(1, 8, trackID);
+    analysisManager->FillNtupleIColumn(1, 9, eventID);
     analysisManager->AddNtupleRow(1);
 }

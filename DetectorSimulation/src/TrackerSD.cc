@@ -31,6 +31,7 @@
 
 #include "Randomize.hh"
 
+#include "G4EventManager.hh"
 #include "G4AnalysisManager.hh"
 #include "G4HCofThisEvent.hh"
 #include "G4SDManager.hh"
@@ -50,6 +51,7 @@ void TrackerSD::Initialize(G4HCofThisEvent *hce)
     fHitsCollection = new TrackerHitsCollection(SensitiveDetectorName, collectionName[0]);
     G4int hcID = G4SDManager::GetSDMpointer()->GetCollectionID(collectionName[0]);
     hce->AddHitsCollection(hcID, fHitsCollection);
+    fEventID = G4EventManager::GetEventManager()->GetConstCurrentEvent()->GetEventID();
 }
 
 G4bool TrackerSD::ProcessHits(G4Step *step, G4TouchableHistory *)
@@ -71,6 +73,7 @@ G4bool TrackerSD::ProcessHits(G4Step *step, G4TouchableHistory *)
 
     auto hit = new TrackerHit();
     hit->trackID = track->GetTrackID();
+    hit->eventID = fEventID;
     hit->pdg = track->GetParticleDefinition()->GetPDGEncoding();
     hit->detectorID = track->GetVolume()->GetCopyNo();
     hit->time = track->GetGlobalTime();
@@ -95,6 +98,7 @@ void TrackerSD::EndOfEvent(G4HCofThisEvent *)
         analysisManager->FillNtupleDColumn(0, 2, smearedPos.y());
         analysisManager->FillNtupleDColumn(0, 3, smearedPos.z());
         analysisManager->FillNtupleIColumn(0, 4, hit->trackID);
+        analysisManager->FillNtupleIColumn(0, 5, hit->eventID);
         analysisManager->AddNtupleRow(0);
 
         hit->Print();

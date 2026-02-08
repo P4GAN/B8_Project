@@ -56,6 +56,7 @@ public:
 
 private:
     TrackerHitsCollection *fHitsCollection = nullptr;
+    G4int fEventID = -1;
     G4ThreeVector GetSmearedPosition(const TrackerHit &hit);
 };
 

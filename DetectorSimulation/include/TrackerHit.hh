@@ -53,6 +53,7 @@ public:
     void Print() override;
 
     G4int trackID = -1;
+    G4int eventID = -1;
     G4int pdg = 0;
     G4int detectorID = -1;
     G4double time = 0;

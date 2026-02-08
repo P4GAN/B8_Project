@@ -6,15 +6,15 @@
 using namespace Pythia8;
 
 int main() {
-    int nEvents = 1;
-    Pythia8::Pythia8ToHepMC toHepMC("../electron_proton.hepmc");
+    int nEvents = 100;
+    Pythia8::Pythia8ToHepMC toHepMC("electron_proton.hepmc");
 
     Pythia pythia;
     pythia.readString("Beams:idA = 2212");      // Proton
     pythia.readString("Beams:idB = 11");        // Electron
-    pythia.readString("Beams:frameType = 2");
-    pythia.readString("Beams:eA = 275");        // Proton beam energy
-    pythia.readString("Beams:eB = 18");         // Electron beam energy
+    pythia.readString("Beams:frameType = 2");   // Lab frame
+    pythia.readString("Beams:eA = 275");        // Proton beam energy 275 GeV
+    pythia.readString("Beams:eB = 18");         // Electron beam energy 18 GeV
     pythia.readString("WeakBosonExchange:ff2ff(t:gmZ) = on");
     pythia.readString("SpaceShower:dipoleRecoil = on");
     pythia.readString("PhaseSpace:Q2min = 100");
