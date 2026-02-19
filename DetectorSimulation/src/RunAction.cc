@@ -29,6 +29,8 @@
 
 #include "RunAction.hh"
 
+#include "RunActionMessenger.hh"
+
 #include "G4Run.hh"
 #include "G4RunManager.hh"
 #include "G4AnalysisManager.hh"
@@ -36,6 +38,8 @@
 
 RunAction::RunAction()
 {
+    messenger = new RunActionMessenger(this);
+
     // set printing event number per each 100 events
     G4RunManager::GetRunManager()->SetPrintProgress(1000);
 
@@ -75,7 +79,7 @@ void RunAction::BeginOfRunAction(const G4Run *run)
     G4RunManager::GetRunManager()->SetRandomNumberStore(false);
 
     auto analysisManager = G4AnalysisManager::Instance();
-    analysisManager->OpenFile("output.root");
+    analysisManager->OpenFile(outputFileName);
 }
 
 void RunAction::EndOfRunAction(const G4Run *)
@@ -83,4 +87,9 @@ void RunAction::EndOfRunAction(const G4Run *)
     auto analysisManager = G4AnalysisManager::Instance();
     analysisManager->Write();
     analysisManager->CloseFile();
+}
+
+RunAction::~RunAction()
+{
+    delete messenger;
 }

@@ -52,6 +52,14 @@ PrimaryGeneratorAction::PrimaryGeneratorAction(const std::string &hepmcFile)
                     ("Cannot open HepMC file " + hepmcFile).c_str());
     }
 
+    G4double minMomentum = 500. * MeV;
+    G4double maxMomentum = 15000. * MeV;
+    G4double step = 500. * MeV;
+    for (G4double p = minMomentum; p <= maxMomentum; p += step)
+    {
+        fPossibleMomenta.push_back(p);
+    }
+
     // For testing with single pion gun
     G4int nofParticles = 1;
     fParticleGun = new G4ParticleGun(nofParticles);
@@ -60,63 +68,68 @@ PrimaryGeneratorAction::PrimaryGeneratorAction(const std::string &hepmcFile)
         G4ParticleTable::GetParticleTable()->FindParticle("pi+");
 
     fParticleGun->SetParticleDefinition(particleDefinition);
+
 }
 
 void PrimaryGeneratorAction::GeneratePrimaries(G4Event *event)
 {
-    fParticleGun->SetParticleMomentum(G4UniformRand() * 20 * GeV);
+    G4double momentum = fPossibleMomenta[std::rand() % fPossibleMomenta.size()];
+    fParticleGun->SetParticleMomentum(momentum);
     fParticleGun->SetParticleMomentumDirection(G4RandomDirection());
     fParticleGun->SetParticlePosition(G4ThreeVector(0., 0., 0.));
     fParticleGun->GeneratePrimaryVertex(event);
     return;
 
-    // G4ParticleTable *particleTable = G4ParticleTable::GetParticleTable();
-    // std::string hepmcFileName = "../electron_proton.hepmc";
-    // HepMC3::ReaderAscii hepMCReader("events.hepmc");
 
-    // while (!hepMCReader.failed())
-    // {
-    //     HepMC3::GenEvent hepmcEvent;
-    //     hepMCReader.read_event(hepmcEvent);
+    /* Emit particles from HepMC file
+    G4ParticleTable *particleTable = G4ParticleTable::GetParticleTable();
+    std::string hepmcFileName = "../electron_proton.hepmc";
+    HepMC3::ReaderAscii hepMCReader("events.hepmc");
 
-    //     for (auto vertex : hepmcEvent.vertices())
-    //     {
-    //         auto position = vertex->position();
+    while (!hepMCReader.failed())
+    {
+        HepMC3::GenEvent hepmcEvent;
+        hepMCReader.read_event(hepmcEvent);
 
-    //         auto g4Vertex = new G4PrimaryVertex(
-    //             position.x() * mm,
-    //             position.y() * mm,
-    //             position.z() * mm,
-    //             position.t() * ns);
+        for (auto vertex : hepmcEvent.vertices())
+        {
+            auto position = vertex->position();
 
-    //         for (auto particle : vertex->particles_out())
-    //         {
-    //             // HepMC3 status convention: 1 is usually final state
-    //             if (particle->status() != 1)
-    //                 continue;
+            auto g4Vertex = new G4PrimaryVertex(
+                position.x() * mm,
+                position.y() * mm,
+                position.z() * mm,
+                position.t() * ns);
 
-    //             G4ParticleDefinition *particleDef = particleTable->FindParticle(particle->pid());
-    //             G4cout << "Emitted " << particleDef->GetParticleName() << " with energy " << particle->momentum().e() << " GeV" << G4endl;
+            for (auto particle : vertex->particles_out())
+            {
+                // HepMC3 status convention: 1 is usually final state
+                if (particle->status() != 1)
+                    continue;
 
-    //             auto momentum = particle->momentum();
-    //             auto primary = new G4PrimaryParticle(
-    //                 particle->pid(),
-    //                 momentum.px() * GeV,
-    //                 momentum.py() * GeV,
-    //                 momentum.pz() * GeV);
+                G4ParticleDefinition *particleDef = particleTable->FindParticle(particle->pid());
+                G4cout << "Emitted " << particleDef->GetParticleName() << " with energy " << particle->momentum().e() << " GeV" << G4endl;
 
-    //             g4Vertex->SetPrimary(primary);
-    //         }
+                auto momentum = particle->momentum();
+                auto primary = new G4PrimaryParticle(
+                    particle->pid(),
+                    momentum.px() * GeV,
+                    momentum.py() * GeV,
+                    momentum.pz() * GeV);
 
-    //         // Only keep vertices that actually have primaries
-    //         if (g4Vertex->GetNumberOfParticle() > 0)
-    //         {
-    //             event->AddPrimaryVertex(g4Vertex);
-    //         }
-    //         else
-    //         {
-    //             delete g4Vertex;
-    //         }
-    //     }
-    // }
+                g4Vertex->SetPrimary(primary);
+            }
+
+            // Only keep vertices that actually have primaries
+            if (g4Vertex->GetNumberOfParticle() > 0)
+            {
+                event->AddPrimaryVertex(g4Vertex);
+            }
+            else
+            {
+                delete g4Vertex;
+            }
+        }
+    }
+    */  
 }

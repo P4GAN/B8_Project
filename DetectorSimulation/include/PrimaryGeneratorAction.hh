@@ -26,6 +26,8 @@
 #ifndef B2PrimaryGeneratorAction_h
 #define B2PrimaryGeneratorAction_h 1
 
+#include <vector>
+
 #include "G4VUserPrimaryGeneratorAction.hh"
 #include "G4Event.hh"
 #include "G4PrimaryVertex.hh"
@@ -47,12 +49,6 @@ class G4Event;
 /// can be changed via the G4 build-in commands of G4ParticleGun class
 /// (see the macros provided with this example).
 
-enum class GeneratorMode
-{
-    HepMCFile,
-    SingleParticle
-};
-
 class PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
 {
 public:
@@ -64,6 +60,7 @@ public:
 private:
     HepMC3::ReaderAscii hepMCReader;
     G4ParticleGun *fParticleGun = nullptr;
+    std::vector<G4double> fPossibleMomenta;
 };
 
 #endif

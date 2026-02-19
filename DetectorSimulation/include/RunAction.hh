@@ -27,8 +27,10 @@
 #define B2RunAction_h 1
 
 #include "G4UserRunAction.hh"
+#include "G4String.hh"
 
 class G4Run;
+class RunActionMessenger;
 
 /// Run action class
 
@@ -36,10 +38,15 @@ class RunAction : public G4UserRunAction
 {
 public:
     RunAction();
-    ~RunAction() override = default;
+    ~RunAction() override;
 
     void BeginOfRunAction(const G4Run *run) override;
     void EndOfRunAction(const G4Run *run) override;
+
+    G4String outputFileName = "output.root";
+    RunActionMessenger* messenger;
+
+    void SetOutputFileName(const G4String& fileName) { outputFileName = fileName; }
 };
 
 #endif
