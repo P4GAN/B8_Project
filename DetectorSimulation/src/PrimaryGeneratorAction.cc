@@ -52,13 +52,10 @@ PrimaryGeneratorAction::PrimaryGeneratorAction(const std::string &hepmcFile)
                     ("Cannot open HepMC file " + hepmcFile).c_str());
     }
 
-    G4double minMomentum = 500. * MeV;
-    G4double maxMomentum = 15000. * MeV;
-    G4double step = 500. * MeV;
-    for (G4double p = minMomentum; p <= maxMomentum; p += step)
-    {
-        fPossibleMomenta.push_back(p);
-    }
+    fPossibleMomenta = {
+        0.1 * GeV, 0.2 * GeV, 0.3 * GeV, 0.5 * GeV, 0.7 * GeV, 1.0 * GeV,
+        2.0 * GeV, 3.0 * GeV, 5.0 * GeV, 7.0 * GeV, 10.0 * GeV, 14.0 * GeV, 20.0 * GeV
+    };
 
     // For testing with single pion gun
     G4int nofParticles = 1;

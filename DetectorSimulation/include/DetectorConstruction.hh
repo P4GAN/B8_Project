@@ -52,6 +52,7 @@ public:
     void ConstructSDandField() override;
 
 private:
+    static G4ThreadLocal G4GlobalMagFieldMessenger* fMagFieldMessenger;
     std::vector<G4LogicalVolume*> trackerLogicalVolumes;
 };
 

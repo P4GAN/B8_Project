@@ -79,7 +79,9 @@ void RunAction::BeginOfRunAction(const G4Run *run)
     G4RunManager::GetRunManager()->SetRandomNumberStore(false);
 
     auto analysisManager = G4AnalysisManager::Instance();
-    analysisManager->OpenFile(outputFileName);
+
+    std::string fileName = "output/" + outputFileName;
+    analysisManager->OpenFile(fileName);
 }
 
 void RunAction::EndOfRunAction(const G4Run *)

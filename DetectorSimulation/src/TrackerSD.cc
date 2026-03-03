@@ -64,12 +64,15 @@ G4bool TrackerSD::ProcessHits(G4Step *step, G4TouchableHistory *)
 
     double edep = step->GetTotalEnergyDeposit();
     double threshold = 1 * keV;
-    G4cout << "Energy deposit: " << edep / keV << " keV" << G4endl;
     if (edep < threshold) {
         return false;
     }
 
     auto track = step->GetTrack();
+
+    if (track->GetParentID() != 0) {
+        return false; // Discard secondary particles
+    }
 
     auto hit = new TrackerHit();
     hit->trackID = track->GetTrackID();
@@ -100,9 +103,6 @@ void TrackerSD::EndOfEvent(G4HCofThisEvent *)
         analysisManager->FillNtupleIColumn(0, 4, hit->trackID);
         analysisManager->FillNtupleIColumn(0, 5, hit->eventID);
         analysisManager->AddNtupleRow(0);
-
-        hit->Print();
-
     }
 }
 

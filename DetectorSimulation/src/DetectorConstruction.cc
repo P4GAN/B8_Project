@@ -35,7 +35,7 @@
 #include "G4AutoDelete.hh"
 #include "G4Box.hh"
 #include "G4Colour.hh"
-#include "G4FieldManager.hh"
+#include "G4GlobalMagFieldMessenger.hh"
 #include "G4LogicalVolume.hh"
 #include "G4Material.hh"
 #include "G4NistManager.hh"
@@ -48,22 +48,45 @@
 #include "G4UniformMagField.hh"
 #include "G4VisAttributes.hh"
 
+G4ThreadLocal G4GlobalMagFieldMessenger* DetectorConstruction::fMagFieldMessenger = nullptr;
+
 G4VPhysicalVolume *DetectorConstruction::Construct()
 {
     G4NistManager *nistManager = G4NistManager::Instance();
 
     nistManager->FindOrBuildMaterial("G4_AIR");
     nistManager->FindOrBuildMaterial("G4_Si");
+    nistManager->FindOrBuildMaterial("G4_Be");
+    nistManager->FindOrBuildMaterial("G4_Galactic");
 
     G4Material *air = G4Material::GetMaterial("G4_AIR");
     G4Material *silicon = G4Material::GetMaterial("G4_Si");
+    G4Material *beryllium = G4Material::GetMaterial("G4_Be");
+    G4Material *vacuum = G4Material::GetMaterial("G4_Galactic");
+
+    // Visualization attributes
+    G4VisAttributes worldVisAtt(G4Colour::White());
+    worldVisAtt.SetVisibility(true);
+    worldVisAtt.SetForceWireframe(true);
+
+    // Yellow for silicon trackers
+    G4VisAttributes trackerVisAtt(G4Colour(1.0, 1.0, 0.0, 0.5));
+    trackerVisAtt.SetVisibility(true);
+    trackerVisAtt.SetForceSolid(true);
+
+    // Grey for beam pipe
+    G4VisAttributes beamPipeVisAtt(G4Colour(1.0, 1.0, 1.0, 0.5));
+    beamPipeVisAtt.SetVisibility(true);
+    beamPipeVisAtt.SetForceSolid(true);
 
     // World is box with sides 1m and length 3m
-    auto worldBox = new G4Box("World", 1.0 * m, 1.0 * m, 2.0 * m);
-    auto worldLV = new G4LogicalVolume(worldBox, air, "WorldLV");
+    auto worldBox = new G4Box("World", 1.0 * m, 1.0 * m, 3.0 * m);
+    auto worldLV = new G4LogicalVolume(worldBox, air, "World_LV");
+    worldLV->SetVisAttributes(worldVisAtt);
     auto worldPV =
-        new G4PVPlacement(nullptr, {}, worldLV, "WorldPV", nullptr, false, 0);
+        new G4PVPlacement(nullptr, {}, worldLV, "World_PV", nullptr, false, 0);
 
+    // Dimensions of silicon barrels and discs
     G4double siliconThickness = 50 * um;
     int numBarrels = 5;
     int numDiscs = 10;
@@ -86,22 +109,31 @@ G4VPhysicalVolume *DetectorConstruction::Construct()
         23.0 * cm, 43.0 * cm, 43.0 * cm, 43.0 * cm, 43.0 * cm,
         23.0 * cm, 43.0 * cm, 43.0 * cm, 43.0 * cm, 43.0 * cm};
 
-    // Visualization attributes
-    G4VisAttributes worldVisAtt(G4Colour::White());
-    worldVisAtt.SetVisibility(true);
-    worldVisAtt.SetForceWireframe(true);
-    worldLV->SetVisAttributes(worldVisAtt);
+    // Beryllium beampipe with vacuum inside
+    G4double beamPipeRadius = 3.1 * cm;
+    G4double beamPipeThickness = 0.757 * mm;
+    G4double beamPipeLength = 3 * m;
 
-    G4VisAttributes trackerVisAtt(G4Colour(1.0, 1.0, 0.0, 0.5)); // Yellow
-    trackerVisAtt.SetVisibility(true);
-    trackerVisAtt.SetForceSolid(true);
+    auto vacuumShape = new G4Tubs("Vacuum", 0, beamPipeRadius + beamPipeThickness,
+                                  beamPipeLength / 2, 0. * deg, 360. * deg);
+    auto vacuumLV = new G4LogicalVolume(vacuumShape, vacuum, "Vacuum_LV", nullptr, nullptr, nullptr);
+    new G4PVPlacement(nullptr, G4ThreeVector(0, 0, 0), vacuumLV, "Vacuum_PV",
+                      worldLV, false, 0, true);
+
+    auto beamPipeShape = new G4Tubs("Beam_Pipe", beamPipeRadius,
+                                    beamPipeRadius + beamPipeThickness,
+                                    beamPipeLength / 2, 0. * deg, 360. * deg);
+    auto beamPipeLV = new G4LogicalVolume(beamPipeShape, beryllium, "Beam_Pipe_LV", nullptr, nullptr, nullptr);
+    beamPipeLV->SetVisAttributes(beamPipeVisAtt);
+    new G4PVPlacement(nullptr, G4ThreeVector(0, 0, 0), beamPipeLV, "Beam_Pipe_PV",
+                      vacuumLV, false, 0, true);
 
     // Barrel segments
     for (int i = 0; i < numBarrels; i++)
     {
         auto name = "SVT_Barrel_" + std::to_string(i);
-        auto barrelShape = new G4Tubs(name, barrelRadii[i] - siliconThickness / 2,
-                                      barrelRadii[i] + siliconThickness / 2,
+        auto barrelShape = new G4Tubs(name, barrelRadii[i],
+                                      barrelRadii[i] + siliconThickness,
                                       barrelLengths[i] / 2, 0. * deg, 360. * deg);
         auto barrelLV = new G4LogicalVolume(barrelShape, silicon, name + "_LV",
                                             nullptr, nullptr, nullptr);
@@ -114,14 +146,15 @@ G4VPhysicalVolume *DetectorConstruction::Construct()
     // Disc segments
     for (int i = 0; i < numDiscs; i++)
     {
+        auto name = "SVT_Disc_" + std::to_string(i);
         auto discShape =
-            new G4Tubs("Disc_Solid", discInnerRadii[i], discOuterRadii[i],
+            new G4Tubs(name, discInnerRadii[i], discOuterRadii[i],
                        siliconThickness / 2, 0. * deg, 360. * deg);
-        auto discLV = new G4LogicalVolume(discShape, silicon, "Disc_LV", nullptr,
+        auto discLV = new G4LogicalVolume(discShape, silicon, name + "_LV", nullptr,
                                           nullptr, nullptr);
         discLV->SetVisAttributes(trackerVisAtt);
         new G4PVPlacement(nullptr, G4ThreeVector(0, 0, discZPositions[i]), discLV,
-                          "Disc_PV", worldLV, false, numBarrels + i, true);
+                          name + "_PV", worldLV, false, numBarrels + i, true);
         trackerLogicalVolumes.push_back(discLV);
     }
 
@@ -141,9 +174,9 @@ void DetectorConstruction::ConstructSDandField()
 
     // Set uniform magnetic field
     G4ThreeVector fieldValue = G4ThreeVector(0., 0., 1.7 * tesla);
-    auto magField = new G4UniformMagField(fieldValue);
+    fMagFieldMessenger = new G4GlobalMagFieldMessenger(fieldValue);
+    fMagFieldMessenger->SetVerboseLevel(1);
 
-    auto fieldManager = G4TransportationManager::GetTransportationManager()->GetFieldManager();
-    fieldManager->SetDetectorField(magField);
-    fieldManager->CreateChordFinder(magField);
+    // Register the field messenger for deleting
+    G4AutoDelete::Register(fMagFieldMessenger);
 }

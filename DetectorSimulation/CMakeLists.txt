@@ -35,11 +35,7 @@ target_link_libraries(DetectorSimulation PRIVATE ${Geant4_LIBRARIES} HepMC3::Hep
 # relies on these scripts being in the current working directory.
 #
 set(DetectorSimulation_SCRIPTS
-    DetectorSimulation.out
-    DetectorSimulation.in
-    gui.mac
-    run1.mac
-    run2.mac
+    gui.mac 
     init_vis.mac
     vis.mac
     )
@@ -48,6 +44,17 @@ foreach(_script ${DetectorSimulation_SCRIPTS})
     configure_file(
         ${PROJECT_SOURCE_DIR}/${_script}
         ${PROJECT_BINARY_DIR}/${_script}
+        COPYONLY
+    )
+endforeach()
+
+file(GLOB MACRO_FILES ${PROJECT_SOURCE_DIR}/macros/*.mac)
+
+foreach(_script ${MACRO_FILES})
+    get_filename_component(_filename ${_script} NAME)
+    configure_file(
+        ${_script}
+        ${PROJECT_BINARY_DIR}/${_filename}
         COPYONLY
     )
 endforeach()

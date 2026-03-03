@@ -1,0 +1,15 @@
+# Macro file for detector simulation
+# 
+# Magnetic field: 1.0T
+# No support material
+# Silicon thickness: 50 micrometers
+# pi+ gun
+# 100000 runs
+
+/run/initialize
+/output/setFileName BField_1_0T.root
+
+/globalField/setValue 0 0 1.0 tesla
+
+/gun/particle pi+
+/run/beamOn 100000

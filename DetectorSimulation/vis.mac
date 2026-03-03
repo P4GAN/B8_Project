@@ -1,5 +1,5 @@
 # Macro file for the visualization setting for the initialization phase 
-# of the B2 example when running in interactive mode
+# of the detector simulation when running in interactive mode
 #
 # Open a viewer
 /vis/open
