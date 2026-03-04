@@ -6,7 +6,7 @@
 using namespace Pythia8;
 
 int main() {
-    int nEvents = 100;
+    int nEvents = 1000;
     Pythia8::Pythia8ToHepMC toHepMC("electron_proton.hepmc");
 
     Pythia pythia;

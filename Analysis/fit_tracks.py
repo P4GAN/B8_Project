@@ -9,11 +9,13 @@ import ROOT
 
 from helix_fitting import fit_helix, momentum_from_helix, DCA_from_helix, RMSE
 
-if len(sys.argv) < 3:
-    print("Usage: python fit_tracks.py <input_root_file> <output_csv_file>")
-    sys.exit(1)
-
 B = 1.7
+min_hits_per_track = 4
+cutoff_momentum = 50_000 # 50 MeV
+
+if len(sys.argv) < 3:
+    print("Usage: python Analysis/fit_tracks.py <input_root_file> <output_csv_file>")
+    sys.exit(1)
 
 if len(sys.argv) > 3:
     B = float(sys.argv[3])
@@ -22,59 +24,50 @@ input_root_file = "DetectorSimulation/output/" + sys.argv[1]
 output_csv_file = "Analysis/output/" + sys.argv[2]
 
 file = ROOT.TFile.Open(input_root_file)
-hits = file.Get("hits")
 tracks = file.Get("tracks")
 
-tracks.BuildIndex("EventID")
+# treat each entry as one primary track, with hit position vectors stored in branches
+num_tracks = tracks.GetEntries()
 
-num_hits = hits.GetEntries()
-
-track_hits = {}
-
-for i in range(num_hits):
-    hits.GetEntry(i)
-    eventID = hits.EventID
-    if eventID not in track_hits:
-        track_hits[eventID] = [np.array([]), np.array([]), np.array([])]
-    track_hits[eventID][0] = np.append(track_hits[eventID][0], hits.PositionX)
-    track_hits[eventID][1] = np.append(track_hits[eventID][1], hits.PositionY)
-    track_hits[eventID][2] = np.append(track_hits[eventID][2], hits.PositionZ)
-
+# convenience for filling DataFrame
 data = []
 
-for eventID, track in track_hits.items():
-    if len(track[0]) < 2:
+for i in range(num_tracks):
+    tracks.GetEntry(i)
+    eventID = tracks.EventID
+
+    # convert ROOT vector branches to numpy arrays
+    x = np.array(list(tracks.HitPosX))
+    y = np.array(list(tracks.HitPosY))
+    z = np.array(list(tracks.HitPosZ))
+
+    if len(x) < min_hits_per_track:
         continue
-    x, y, z = track
-    x_c, y_c, R, tanl, z0, phi, sign = fit_helix(x, y, z)
+
+    x_c, y_c, R, tanl, z0, phi = fit_helix(x, y, z)
 
     fitted_pT, fitted_pZ = momentum_from_helix(R, tanl, B)
     fitted_p = np.sqrt(fitted_pT ** 2 + fitted_pZ ** 2)
     fitted_DCA = DCA_from_helix(x_c, y_c, R)
 
-    tracks.GetEntryWithIndex(eventID)
     pX, pY, pZ = tracks.MomentumX, tracks.MomentumY, tracks.MomentumZ
     p = np.sqrt(pX ** 2 + pY ** 2 + pZ ** 2)
-    pT = np.sqrt(pX **2 + pY ** 2)
+    pT = np.sqrt(pX ** 2 + pY ** 2)
     eta = np.arctanh(pZ / p)
 
-    momentum_accuracy = np.abs(fitted_p - p) / p * 100
-    transverse_momentum_accuracy = np.abs(fitted_pT - pT) / pT * 100
-    z_momentum_accuracy = np.abs(fitted_pZ - pZ) / np.abs(pZ) * 100
-
-    error = RMSE(x, y, z, x_c, y_c, z0, fitted_pZ, fitted_pT, R)
+    if fitted_p > cutoff_momentum:
+        continue
 
     data.append({
         "EventID": eventID,
-        "Momentum (MeV/c)": p,
-        "Transverse Momentum (MeV/c)": pT,
-        "Z Momentum (MeV/c)": pZ,
+        "True Momentum (MeV/c)": round(p),
+        "True Transverse Momentum (MeV/c)": pT,
+        "True Z Momentum (MeV/c)": pZ,
+        "Fitted Momentum (MeV/c)": fitted_p,
+        "Fitted Transverse Momentum (MeV/c)": fitted_pT,
+        "Fitted Z Momentum (MeV/c)": fitted_pZ,
         "Pseudorapidity": eta,
-        "Momentum Accuracy (%)": momentum_accuracy,
-        "Transverse Momentum Accuracy (%)": transverse_momentum_accuracy,
-        "Z Momentum Accuracy (%)": z_momentum_accuracy,
-        "DCA (mm)": fitted_DCA,
-        "RMSE": error
+        "DCA (mm)": fitted_DCA
     })
 
 
