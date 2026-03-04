@@ -4,7 +4,7 @@
 # No support material
 # Silicon thickness: 50 micrometers
 # pi+ gun
-# 100000 runs
+# 500000 runs
 
 /run/initialize
 /output/setFileName BField_2_5T.root
@@ -12,4 +12,4 @@
 /globalField/setValue 0 0 2.5 tesla
 
 /gun/particle pi+
-/run/beamOn 100000
+/run/beamOn 500000

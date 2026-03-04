@@ -36,6 +36,13 @@
 #include "G4AnalysisManager.hh"
 #include "G4SystemOfUnits.hh"
 
+#include <vector>
+
+// static members defined (thread-local qualifiers must match declaration)
+G4ThreadLocal std::vector<G4double> RunAction::hitPositionX;
+G4ThreadLocal std::vector<G4double> RunAction::hitPositionY;
+G4ThreadLocal std::vector<G4double> RunAction::hitPositionZ;
+
 RunAction::RunAction()
 {
     messenger = new RunActionMessenger(this);
@@ -43,33 +50,25 @@ RunAction::RunAction()
     // set printing event number per each 100 events
     G4RunManager::GetRunManager()->SetPrintProgress(1000);
 
-    // Create analysis manager and set up ntuple for hits
+    // Create analysis manager and set up ntuple for tracks
     auto analysisManager = G4AnalysisManager::Instance();
 
     analysisManager->SetNtupleMerging(true);
-
-    // Create ntuple for hits
-    analysisManager->CreateNtuple("hits", "Energy deposit and position");
-    analysisManager->CreateNtupleDColumn("Energy");
-    analysisManager->CreateNtupleDColumn("PositionX");
-    analysisManager->CreateNtupleDColumn("PositionY");
-    analysisManager->CreateNtupleDColumn("PositionZ");
-    analysisManager->CreateNtupleIColumn("TrackID");
-    analysisManager->CreateNtupleIColumn("EventID");
-    analysisManager->FinishNtuple();
-
-    // Create ntuple for tracks
+    
+    // Each row contains the original particle parameters, and vector of hit positions
     analysisManager->CreateNtuple("tracks", "Track parameters");
-    analysisManager->CreateNtupleDColumn("VertexPositionX");
-    analysisManager->CreateNtupleDColumn("VertexPositionY");
-    analysisManager->CreateNtupleDColumn("VertexPositionZ");
     analysisManager->CreateNtupleDColumn("MomentumX");
     analysisManager->CreateNtupleDColumn("MomentumY");
     analysisManager->CreateNtupleDColumn("MomentumZ");
-    analysisManager->CreateNtupleDColumn("Charge");
     analysisManager->CreateNtupleIColumn("ParticleID");
-    analysisManager->CreateNtupleIColumn("TrackID");
     analysisManager->CreateNtupleIColumn("EventID");
+    analysisManager->CreateNtupleIColumn("NumHits");
+
+    // Vector branches holding hit coordinates for each track
+    analysisManager->CreateNtupleDColumn("HitPositionX", hitPositionX);
+    analysisManager->CreateNtupleDColumn("HitPositionY", hitPositionY);
+    analysisManager->CreateNtupleDColumn("HitPositionZ", hitPositionZ);
+
     analysisManager->FinishNtuple();
 }
 

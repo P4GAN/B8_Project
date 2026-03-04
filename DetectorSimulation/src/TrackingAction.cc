@@ -23,6 +23,7 @@
 // ********************************************************************
 
 #include "TrackingAction.hh"
+#include "EventAction.hh"
 
 #include "G4UserTrackingAction.hh"
 #include "G4AnalysisManager.hh"
@@ -34,23 +35,16 @@ void TrackingAction::PreUserTrackingAction(const G4Track* track)
 {
     if (track->GetParentID() != 0) return;
 
-    int trackID = track->GetTrackID();
-    int eventID = G4EventManager::GetEventManager()->GetConstCurrentEvent()->GetEventID();
-    auto pos = track->GetVertexPosition();
-    auto mom = track->GetMomentum();
+    // gather initial parameters for this primary track
+    TrackInfo info;
+    info.eventID = G4EventManager::GetEventManager()->GetConstCurrentEvent()->GetEventID();
+    info.momentum = track->GetMomentum();
+    info.pdg = track->GetDynamicParticle()->GetPDGcode();
 
-    // Fill track ntuple with vertex and momentum information
-    auto analysisManager = G4AnalysisManager::Instance();
-
-    analysisManager->FillNtupleDColumn(1, 0, pos.x());
-    analysisManager->FillNtupleDColumn(1, 1, pos.y());
-    analysisManager->FillNtupleDColumn(1, 2, pos.z());
-    analysisManager->FillNtupleDColumn(1, 3, mom.x());
-    analysisManager->FillNtupleDColumn(1, 4, mom.y());
-    analysisManager->FillNtupleDColumn(1, 5, mom.z());
-    analysisManager->FillNtupleDColumn(1, 6, track->GetDynamicParticle()->GetCharge());
-    analysisManager->FillNtupleIColumn(1, 7, track->GetDynamicParticle()->GetPDGcode());
-    analysisManager->FillNtupleIColumn(1, 8, trackID);
-    analysisManager->FillNtupleIColumn(1, 9, eventID);
-    analysisManager->AddNtupleRow(1);
+    // hand the information off to the event action for later filling
+    auto eventAction = static_cast<EventAction*>(
+        G4EventManager::GetEventManager()->GetUserEventAction());
+    if (eventAction) {
+        eventAction->trackInfo = info;
+    }
 }

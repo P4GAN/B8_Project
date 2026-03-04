@@ -46,6 +46,12 @@ public:
     G4String outputFileName = "output.root";
     RunActionMessenger* messenger;
 
+    // vectors with hit positions that will be filled before each track row is written
+    // thread-local to prevent cross-thread races/corruption
+    static G4ThreadLocal std::vector<G4double> hitPositionX;
+    static G4ThreadLocal std::vector<G4double> hitPositionY;
+    static G4ThreadLocal std::vector<G4double> hitPositionZ;
+
     void SetOutputFileName(const G4String& fileName) { outputFileName = fileName; }
 };
 

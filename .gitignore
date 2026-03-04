@@ -5,3 +5,7 @@
 
 /DetectorSimulation/build
 /DetectorSimulation/G4History.macro
+/DetectorSimulation/output
+
+/Analysis/output
+

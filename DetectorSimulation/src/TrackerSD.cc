@@ -28,6 +28,11 @@
 /// \brief Implementation of the B2::TrackerSD class
 
 #include "TrackerSD.hh"
+#include "EventAction.hh"
+#include "RunAction.hh"
+
+#include <map>
+#include <vector>
 
 #include "Randomize.hh"
 
@@ -92,16 +97,31 @@ G4bool TrackerSD::ProcessHits(G4Step *step, G4TouchableHistory *)
 void TrackerSD::EndOfEvent(G4HCofThisEvent *)
 {
     auto analysisManager = G4AnalysisManager::Instance();
-    std::size_t nofHits = fHitsCollection->entries();
-    for (std::size_t i = 0; i < nofHits; i++) {
+
+    RunAction::hitPositionX.clear();
+    RunAction::hitPositionY.clear();
+    RunAction::hitPositionZ.clear();
+
+    std::size_t numHits = fHitsCollection->entries();
+    for (std::size_t i = 0; i < numHits; i++) {
         auto hit = (*fHitsCollection)[i];
         G4ThreeVector smearedPos = GetSmearedPosition(*hit);
-        analysisManager->FillNtupleDColumn(0, 0, hit->edep);
-        analysisManager->FillNtupleDColumn(0, 1, smearedPos.x());
-        analysisManager->FillNtupleDColumn(0, 2, smearedPos.y());
-        analysisManager->FillNtupleDColumn(0, 3, smearedPos.z());
-        analysisManager->FillNtupleIColumn(0, 4, hit->trackID);
-        analysisManager->FillNtupleIColumn(0, 5, hit->eventID);
+        RunAction::hitPositionX.push_back(smearedPos.x());
+        RunAction::hitPositionY.push_back(smearedPos.y());
+        RunAction::hitPositionZ.push_back(smearedPos.z());
+    }
+
+    // Retrieve stored track metadata from event action
+    auto eventAction = static_cast<EventAction*>(
+        G4EventManager::GetEventManager()->GetUserEventAction());
+    if (eventAction) {
+        const TrackInfo &info = eventAction->trackInfo;
+        analysisManager->FillNtupleDColumn(0, 0, info.momentum.x());
+        analysisManager->FillNtupleDColumn(0, 1, info.momentum.y());
+        analysisManager->FillNtupleDColumn(0, 2, info.momentum.z());
+        analysisManager->FillNtupleIColumn(0, 3, info.pdg);
+        analysisManager->FillNtupleIColumn(0, 4, info.eventID);
+        analysisManager->FillNtupleIColumn(0, 5, numHits);
         analysisManager->AddNtupleRow(0);
     }
 }

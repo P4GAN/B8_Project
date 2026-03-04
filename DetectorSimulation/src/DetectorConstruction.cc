@@ -80,7 +80,7 @@ G4VPhysicalVolume *DetectorConstruction::Construct()
     beamPipeVisAtt.SetForceSolid(true);
 
     // World is box with sides 1m and length 3m
-    auto worldBox = new G4Box("World", 1.0 * m, 1.0 * m, 3.0 * m);
+    auto worldBox = new G4Box("World", 0.5 * m, 0.5 * m, 1.6 * m);
     auto worldLV = new G4LogicalVolume(worldBox, air, "World_LV");
     worldLV->SetVisAttributes(worldVisAtt);
     auto worldPV =

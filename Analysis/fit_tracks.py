@@ -34,15 +34,12 @@ data = []
 
 for i in range(num_tracks):
     tracks.GetEntry(i)
-    eventID = tracks.EventID
-
-    # convert ROOT vector branches to numpy arrays
-    x = np.array(list(tracks.HitPosX))
-    y = np.array(list(tracks.HitPosY))
-    z = np.array(list(tracks.HitPosZ))
-
-    if len(x) < min_hits_per_track:
+    if tracks.NumHits < min_hits_per_track:
         continue
+    
+    x = np.array(tracks.HitPositionX)
+    y = np.array(tracks.HitPositionY)
+    z = np.array(tracks.HitPositionZ)
 
     x_c, y_c, R, tanl, z0, phi = fit_helix(x, y, z)
 
@@ -59,7 +56,6 @@ for i in range(num_tracks):
         continue
 
     data.append({
-        "EventID": eventID,
         "True Momentum (MeV/c)": round(p),
         "True Transverse Momentum (MeV/c)": pT,
         "True Z Momentum (MeV/c)": pZ,
