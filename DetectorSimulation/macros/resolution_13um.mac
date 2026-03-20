@@ -1,0 +1,16 @@
+# Macro file for detector simulation
+# 
+# Magnetic field: 1.7T
+# No support material
+# Silicon width: 50 micrometers
+# Hit resolution: 13 micrometres
+# pi+ gun
+# 100000 runs
+
+/run/initialize
+/output/setFileName resolution_13um.root
+
+/det/res 13 um
+
+/gun/particle pi+
+/run/beamOn 100000

@@ -49,6 +49,35 @@ def momentum_from_helix(R, tanl, B):
     pZ = pT * tanl
     return pT * c / (1e6 * q_e), pZ * c / (1e6 * q_e) 
 
+def fit_helix_2(x, y, z, B):
+    xc, yc, R_abs = circle_fit(x, y)
+
+    phi_c = np.unwrap(np.arctan2(y - yc, x - xc))
+
+    dphi_mean = np.mean(np.diff(phi_c))
+    if np.isclose(dphi_mean, 0.0):
+        raise ValueError("Unable to determine helix rotation direction from hits")
+
+    rot_sign = np.sign(dphi_mean)  
+
+    R = rot_sign * R_abs
+
+    d0 = np.abs(np.sqrt(xc ** 2 + yc ** 2) - R) 
+
+    phi0 = np.arctan2(-xc, yc)
+
+    phi = np.unwrap(np.arctan2(x - xc, -(y - yc)))
+    phi = phi - 2.0 * np.pi * np.round((phi[0] - phi0) / (2.0 * np.pi))
+
+    u = R * (phi - phi0)
+    A = np.vstack([u, np.ones_like(u)]).T
+    tanl, z0 = np.linalg.lstsq(A, z, rcond=None)[0]
+
+    pT = q_e * B * (abs(R) * 1e-3)
+    pT_MeV = pT * c / (1e6 * q_e)
+
+    return d0, z0, phi0, pT_MeV, tanl
+
 # Get DCA from helix parameters, both input and output parameters in mm
 def DCA_from_helix(x_c, y_c, R):
     return np.abs(np.sqrt(x_c ** 2 + y_c ** 2) - R) 

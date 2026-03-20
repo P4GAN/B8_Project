@@ -63,7 +63,8 @@ for i in range(num_tracks):
         "Fitted Transverse Momentum (MeV/c)": fitted_pT,
         "Fitted Z Momentum (MeV/c)": fitted_pZ,
         "Pseudorapidity": eta,
-        "DCA (mm)": fitted_DCA
+        "DCA (mm)": fitted_DCA,
+        "Number of Hits": tracks.NumHits
     })
 
 

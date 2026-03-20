@@ -48,19 +48,33 @@
 #include "G4UniformMagField.hh"
 #include "G4VisAttributes.hh"
 
-G4ThreadLocal G4GlobalMagFieldMessenger* DetectorConstruction::fMagFieldMessenger = nullptr;
+G4ThreadLocal G4GlobalMagFieldMessenger *DetectorConstruction::fMagFieldMessenger = nullptr;
+
+DetectorConstruction::DetectorConstruction()
+{
+    fMessenger = new DetectorMessenger(this);
+}
+
+DetectorConstruction::~DetectorConstruction()
+{
+    delete fMessenger;
+}
 
 G4VPhysicalVolume *DetectorConstruction::Construct()
 {
+    trackerLogicalVolumes.clear();
+
     G4NistManager *nistManager = G4NistManager::Instance();
 
     nistManager->FindOrBuildMaterial("G4_AIR");
     nistManager->FindOrBuildMaterial("G4_Si");
+    nistManager->FindOrBuildMaterial("G4_Cu");
     nistManager->FindOrBuildMaterial("G4_Be");
     nistManager->FindOrBuildMaterial("G4_Galactic");
 
     G4Material *air = G4Material::GetMaterial("G4_AIR");
     G4Material *silicon = G4Material::GetMaterial("G4_Si");
+    G4Material *copper = G4Material::GetMaterial("G4_Cu");
     G4Material *beryllium = G4Material::GetMaterial("G4_Be");
     G4Material *vacuum = G4Material::GetMaterial("G4_Galactic");
 
@@ -73,6 +87,11 @@ G4VPhysicalVolume *DetectorConstruction::Construct()
     G4VisAttributes trackerVisAtt(G4Colour(1.0, 1.0, 0.0, 0.5));
     trackerVisAtt.SetVisibility(true);
     trackerVisAtt.SetForceSolid(true);
+
+    // Green for copper support material
+    G4VisAttributes supportVisAtt(G4Colour(0.0, 1.0, 0.0, 0.7));
+    supportVisAtt.SetVisibility(true);
+    supportVisAtt.SetForceSolid(true);
 
     // Grey for beam pipe
     G4VisAttributes beamPipeVisAtt(G4Colour(1.0, 1.0, 1.0, 0.5));
@@ -87,7 +106,7 @@ G4VPhysicalVolume *DetectorConstruction::Construct()
         new G4PVPlacement(nullptr, {}, worldLV, "World_PV", nullptr, false, 0);
 
     // Dimensions of silicon barrels and discs
-    G4double siliconThickness = 50 * um;
+    G4double siWidth = 50 * um;
     int numBarrels = 5;
     int numDiscs = 10;
 
@@ -96,6 +115,21 @@ G4VPhysicalVolume *DetectorConstruction::Construct()
 
     std::vector<G4double> barrelLengths = {27.0 * cm, 27.0 * cm, 27.0 * cm,
                                            54.0 * cm, 80.0 * cm};
+
+    // Extra support material (copper) to pad the material budget to
+    // 0.05 X/X_0%, 0.25 X/X_0% and 0.55 X/X_0%, or whatever they are set as
+    G4double siRadiationLength = 9.37 * cm;
+    G4double cuRadiationLength = 1.436 * cm;
+
+    G4double cuWidth1 = (fMaterialWidth1 - (siWidth / siRadiationLength)) * cuRadiationLength;
+    G4double cuWidth2 = (fMaterialWidth2 - (siWidth / siRadiationLength)) * cuRadiationLength;
+    G4double cuWidth3 = (fMaterialWidth3 - (siWidth / siRadiationLength)) * cuRadiationLength;
+
+    std::vector<G4double> barrelCuWidth = {
+        cuWidth1, cuWidth1, cuWidth1, cuWidth2, cuWidth3
+    };
+
+    G4double discCuWidth = cuWidth2;
 
     std::vector<G4double> discZPositions = {
         25.0 * cm, 45.0 * cm, 70.0 * cm, 100.0 * cm, 135.0 * cm,
@@ -114,47 +148,70 @@ G4VPhysicalVolume *DetectorConstruction::Construct()
     G4double beamPipeThickness = 0.757 * mm;
     G4double beamPipeLength = 3 * m;
 
-    auto vacuumShape = new G4Tubs("Vacuum", 0, beamPipeRadius + beamPipeThickness,
-                                  beamPipeLength / 2, 0. * deg, 360. * deg);
-    auto vacuumLV = new G4LogicalVolume(vacuumShape, vacuum, "Vacuum_LV", nullptr, nullptr, nullptr);
-    new G4PVPlacement(nullptr, G4ThreeVector(0, 0, 0), vacuumLV, "Vacuum_PV",
-                      worldLV, false, 0, true);
-
-    auto beamPipeShape = new G4Tubs("Beam_Pipe", beamPipeRadius,
+    auto beamPipeShape = new G4Tubs("Beam_Pipe", 0,
                                     beamPipeRadius + beamPipeThickness,
                                     beamPipeLength / 2, 0. * deg, 360. * deg);
     auto beamPipeLV = new G4LogicalVolume(beamPipeShape, beryllium, "Beam_Pipe_LV", nullptr, nullptr, nullptr);
     beamPipeLV->SetVisAttributes(beamPipeVisAtt);
     new G4PVPlacement(nullptr, G4ThreeVector(0, 0, 0), beamPipeLV, "Beam_Pipe_PV",
-                      vacuumLV, false, 0, true);
+                      worldLV, false, 0, true);
+
+    auto vacuumShape = new G4Tubs("Vacuum", 0, beamPipeRadius,
+                                  beamPipeLength / 2, 0. * deg, 360. * deg);
+    auto vacuumLV = new G4LogicalVolume(vacuumShape, vacuum, "Vacuum_LV", nullptr, nullptr, nullptr);
+    new G4PVPlacement(nullptr, G4ThreeVector(0, 0, 0), vacuumLV, "Vacuum_PV",
+                      beamPipeLV, false, 0, true);
 
     // Barrel segments
     for (int i = 0; i < numBarrels; i++)
     {
-        auto name = "SVT_Barrel_" + std::to_string(i);
-        auto barrelShape = new G4Tubs(name, barrelRadii[i],
-                                      barrelRadii[i] + siliconThickness,
+        // Add surrounding support copper material to pad material width
+        auto name = "SVT_Barrel_" + std::to_string(i) + "_Support";
+        auto supportBarrelShape = new G4Tubs(name,
+                                             barrelRadii[i] - siWidth / 2 - barrelCuWidth[i] / 2,
+                                             barrelRadii[i] + siWidth / 2 + barrelCuWidth[i] / 2,
+                                             barrelLengths[i] / 2, 0. * deg, 360. * deg);
+        auto supportBarrelLV = new G4LogicalVolume(supportBarrelShape, copper, name + "_LV",
+                                                   nullptr, nullptr, nullptr);
+        supportBarrelLV->SetVisAttributes(supportVisAtt);
+        new G4PVPlacement(nullptr, G4ThreeVector(0, 0, 0), supportBarrelLV, name + "_PV",
+                          worldLV, false, i, true);
+
+        name = "SVT_Barrel_" + std::to_string(i);
+        auto barrelShape = new G4Tubs(name, barrelRadii[i] - siWidth / 2,
+                                      barrelRadii[i] + siWidth / 2,
                                       barrelLengths[i] / 2, 0. * deg, 360. * deg);
         auto barrelLV = new G4LogicalVolume(barrelShape, silicon, name + "_LV",
                                             nullptr, nullptr, nullptr);
         barrelLV->SetVisAttributes(trackerVisAtt);
         new G4PVPlacement(nullptr, G4ThreeVector(0, 0, 0), barrelLV, name + "_PV",
-                          worldLV, false, i, true);
+                          supportBarrelLV, false, i, true);
         trackerLogicalVolumes.push_back(barrelLV);
     }
 
     // Disc segments
     for (int i = 0; i < numDiscs; i++)
     {
-        auto name = "SVT_Disc_" + std::to_string(i);
+        // Add surrounding support copper material to pad material width
+        auto name = "SVT_Disc_" + std::to_string(i) + "_Support";
+        auto supportDiscShape =
+            new G4Tubs(name, discInnerRadii[i], discOuterRadii[i],
+                       siWidth / 2 + discCuWidth / 2, 0. * deg, 360. * deg);
+        auto supportDiscLV = new G4LogicalVolume(supportDiscShape, copper, name + "_LV", nullptr,
+                                                 nullptr, nullptr);
+        supportDiscLV->SetVisAttributes(supportVisAtt);
+        new G4PVPlacement(nullptr, G4ThreeVector(0, 0, discZPositions[i]), supportDiscLV,
+                          name + "_PV", worldLV, false, numBarrels + i, true);
+
+        name = "SVT_Disc_" + std::to_string(i);
         auto discShape =
             new G4Tubs(name, discInnerRadii[i], discOuterRadii[i],
-                       siliconThickness / 2, 0. * deg, 360. * deg);
+                       siWidth / 2, 0. * deg, 360. * deg);
         auto discLV = new G4LogicalVolume(discShape, silicon, name + "_LV", nullptr,
                                           nullptr, nullptr);
         discLV->SetVisAttributes(trackerVisAtt);
-        new G4PVPlacement(nullptr, G4ThreeVector(0, 0, discZPositions[i]), discLV,
-                          name + "_PV", worldLV, false, numBarrels + i, true);
+        new G4PVPlacement(nullptr, G4ThreeVector(0, 0, 0), discLV,
+                          name + "_PV", supportDiscLV, false, numBarrels + i, true);
         trackerLogicalVolumes.push_back(discLV);
     }
 
@@ -174,7 +231,7 @@ void DetectorConstruction::ConstructSDandField()
 
     // Set uniform magnetic field
     G4ThreeVector fieldValue = G4ThreeVector(0., 0., 1.7 * tesla);
-    fMagFieldMessenger = new G4GlobalMagFieldMessenger(fieldValue);
+        fMagFieldMessenger = new G4GlobalMagFieldMessenger(fieldValue);
     fMagFieldMessenger->SetVerboseLevel(1);
 
     // Register the field messenger for deleting

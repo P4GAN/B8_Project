@@ -1,0 +1,16 @@
+# Macro file for detector simulation
+# Default configuration
+# 
+# Magnetic field: 1.7T
+# No support material
+# Silicon width: 50 micrometers
+# pi+ gun
+# 100000 runs
+
+/run/initialize
+/output/setFileName width_100um.root
+
+/globalField/setValue 0 0 1.7 tesla
+
+/gun/particle pi+
+/run/beamOn 100000

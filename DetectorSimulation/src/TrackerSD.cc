@@ -30,12 +30,14 @@
 #include "TrackerSD.hh"
 #include "EventAction.hh"
 #include "RunAction.hh"
+#include "DetectorConstruction.hh"
 
 #include <map>
 #include <vector>
 
 #include "Randomize.hh"
 
+#include "G4RunManager.hh"
 #include "G4EventManager.hh"
 #include "G4AnalysisManager.hh"
 #include "G4HCofThisEvent.hh"
@@ -61,22 +63,22 @@ void TrackerSD::Initialize(G4HCofThisEvent *hce)
 
 G4bool TrackerSD::ProcessHits(G4Step *step, G4TouchableHistory *)
 {
-    // Simulate missed hits
-    double efficiency = 0.99; 
-    if (G4UniformRand() > efficiency) {
-        return false;
+    auto track = step->GetTrack();
+    if (track->GetParentID() != 0) {
+        return false; // Discard secondary particles
     }
 
+    // Simulate minimum energy threshold of couple hundred e-h pairs
     double edep = step->GetTotalEnergyDeposit();
     double threshold = 1 * keV;
     if (edep < threshold) {
         return false;
     }
 
-    auto track = step->GetTrack();
-
-    if (track->GetParentID() != 0) {
-        return false; // Discard secondary particles
+    // Simulate missed hits due to detector inefficiencies
+    double efficiency = 0.99; 
+    if (G4UniformRand() > efficiency) {
+        return false;
     }
 
     auto hit = new TrackerHit();
@@ -128,7 +130,10 @@ void TrackerSD::EndOfEvent(G4HCofThisEvent *)
 
 G4ThreeVector TrackerSD::GetSmearedPosition(const TrackerHit& hit)
 {
-    double resolution = 7 * micrometer;
+    auto detConstruction = static_cast<const DetectorConstruction*>(
+        G4RunManager::GetRunManager()->GetUserDetectorConstruction());
+    
+    G4double resolution = detConstruction->GetResolution();
     // Barrel
     if (hit.detectorID < 5) {
         double radius = hit.pos.perp();

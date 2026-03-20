@@ -29,7 +29,6 @@
 #include "G4UImessenger.hh"
 
 class G4UIdirectory;
-class G4UIcmdWithAString;
 class G4UIcmdWithADoubleAndUnit;
 class G4UIcommand;
 
@@ -40,6 +39,7 @@ class DetectorConstruction;
 /// It implements commands:
 /// - /B2/det/setTargetMaterial name
 /// - /B2/det/stepMax value unit
+/// - /B2/det/setResolution value unit
 
 class DetectorMessenger : public G4UImessenger
 {
@@ -52,13 +52,9 @@ public:
 private:
     DetectorConstruction *fDetectorConstruction = nullptr;
 
-    G4UIdirectory *fDirectory = nullptr;
     G4UIdirectory *fDetDirectory = nullptr;
 
-    G4UIcmdWithAString *fTargMatCmd = nullptr;
-    G4UIcmdWithAString *fChamMatCmd = nullptr;
-
-    G4UIcmdWithADoubleAndUnit *fStepMaxCmd = nullptr;
+    G4UIcmdWithADoubleAndUnit *fResolutionCmd = nullptr;
 };
 
 #endif
