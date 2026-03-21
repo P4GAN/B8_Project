@@ -9,11 +9,11 @@
         "type": "cppdbg",
         "request": "launch",
         "program": "${workspaceFolder}/DetectorSimulation/build/DetectorSimulation", 
-        "args": [],
+        "args": [],//"${workspaceFolder}/DetectorSimulation/build/default.mac"],
         "cwd": "${workspaceFolder}/DetectorSimulation",
         "preLaunchTask": "cmake: configure & build (with Geant4 env)",
         "environment": [],
-        "externalConsole": false,
+        "externalConsole": true,
         "MIMode": "lldb"
     }
     ]

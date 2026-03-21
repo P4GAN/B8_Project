@@ -11,7 +11,7 @@ from helix_fitting import fit_helix, momentum_from_helix, DCA_from_helix, RMSE
 
 B = 1.7
 min_hits_per_track = 4
-cutoff_momentum = 50_000 # 50 MeV
+cutoff_momentum = 50_000 # 50 GeV
 
 if len(sys.argv) < 3:
     print("Usage: python Analysis/fit_tracks.py <input_root_file> <output_csv_file>")

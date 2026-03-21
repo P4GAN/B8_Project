@@ -1,0 +1,20 @@
+# Macro file for detector simulation
+# 
+# Magnetic field: 1.7T
+# x2 material thickness (0.14%, 0.50%, 1.1%)
+# Hit resolution: 7 micrometres
+# pi+ gun
+# 500000 runs
+
+/det/materialWidth1 0.0014
+/det/materialWidth2 0.0050
+/det/materialWidth3 0.0110
+/det/res 7 um
+
+/run/initialize
+/output/setFileName material_x2.root
+
+/globalField/setValue 0 0 1.7 tesla
+
+/gun/particle pi+
+/run/beamOn 500000

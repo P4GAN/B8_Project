@@ -14,6 +14,35 @@ def circle_fit(x, y):
     R = np.sqrt(x_c ** 2 + y_c ** 2 - C)
     return x_c, y_c, R
 
+# Karimaki method to fit circle parameters (x_c, y_c, R) from (x, y) points
+def karamaki_fit(x, y):    
+    x_m, y_m = np.mean(x), np.mean(y)
+    u, v = x - x_m, y - y_m
+    
+    r2 = u**2 + v**2
+    mean_r2 = np.mean(r2)
+    
+    C_uu = np.mean(u**2)
+    C_uv = np.mean(u * v)
+    C_vv = np.mean(v**2)
+    C_ur2 = np.mean(u * r2)
+    C_vr2 = np.mean(v * r2)
+    
+    alpha = 0.5 * C_ur2
+    beta = 0.5 * C_vr2
+    
+    denominator = C_uu * C_vv - C_uv**2
+    
+    xc_rel = (alpha * C_vv - beta * C_uv) / denominator
+    yc_rel = (beta * C_uu - alpha * C_uv) / denominator
+    
+    R = np.sqrt(xc_rel**2 + yc_rel**2 + mean_r2)
+    
+    xc = xc_rel + x_m
+    yc = yc_rel + y_m
+    
+    return xc, yc, R
+
 # Check if positive (RH) or negative (LH) spiral from sum of cross products
 # of consecutive xy segments
 def curvature_sign(x, y, z):
@@ -50,7 +79,7 @@ def momentum_from_helix(R, tanl, B):
     return pT * c / (1e6 * q_e), pZ * c / (1e6 * q_e) 
 
 def fit_helix_2(x, y, z, B):
-    xc, yc, R_abs = circle_fit(x, y)
+    xc, yc, R_abs = karamaki_fit(x, y)
 
     phi_c = np.unwrap(np.arctan2(y - yc, x - xc))
 
@@ -62,7 +91,7 @@ def fit_helix_2(x, y, z, B):
 
     R = rot_sign * R_abs
 
-    d0 = np.abs(np.sqrt(xc ** 2 + yc ** 2) - R) 
+    d0 = np.abs(np.sqrt(xc ** 2 + yc ** 2) - R_abs) 
 
     phi0 = np.arctan2(-xc, yc)
 

@@ -1,0 +1,20 @@
+# Macro file for detector simulation
+# 
+# Magnetic field: 1.7T
+# Default material thickness (0.07%, 0.25%, 0.55%)
+# Hit resolution: 7 micrometres
+# kaon+ gun
+# 500000 runs
+
+/det/materialWidth1 0.0007
+/det/materialWidth2 0.0025
+/det/materialWidth3 0.0055
+/det/res 7 um
+
+/run/initialize
+/output/setFileName gun_kaons.root
+
+/globalField/setValue 0 0 1.7 tesla
+
+/gun/particle kaon+
+/run/beamOn 500000

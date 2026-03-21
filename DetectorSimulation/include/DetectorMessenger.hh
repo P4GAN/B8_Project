@@ -29,6 +29,7 @@
 #include "G4UImessenger.hh"
 
 class G4UIdirectory;
+class G4UIcmdWithADouble;
 class G4UIcmdWithADoubleAndUnit;
 class G4UIcommand;
 
@@ -55,6 +56,9 @@ private:
     G4UIdirectory *fDetDirectory = nullptr;
 
     G4UIcmdWithADoubleAndUnit *fResolutionCmd = nullptr;
+    G4UIcmdWithADouble *fMaterialWidth1Cmd = nullptr;
+    G4UIcmdWithADouble *fMaterialWidth2Cmd = nullptr;
+    G4UIcmdWithADouble *fMaterialWidth3Cmd = nullptr;
 };
 
 #endif

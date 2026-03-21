@@ -39,7 +39,7 @@
 #include "G4SystemOfUnits.hh"
 #include "G4ParticleDefinition.hh"
 #include "G4ios.hh"
-#include "G4RandomDirection.hh"
+#include "Randomize.hh"
 
 PrimaryGeneratorAction::PrimaryGeneratorAction(const std::string &hepmcFile)
     : hepMCReader(hepmcFile)
@@ -53,7 +53,7 @@ PrimaryGeneratorAction::PrimaryGeneratorAction(const std::string &hepmcFile)
     }
 
     fPossibleMomenta = {
-        0.1 * GeV, 0.2 * GeV, 0.3 * GeV, 0.5 * GeV, 0.7 * GeV, 1.0 * GeV,
+        0.1 * GeV, 0.15 * GeV, 0.2 * GeV, 0.3 * GeV, 0.5 * GeV, 0.7 * GeV, 1.0 * GeV,
         2.0 * GeV, 3.0 * GeV, 5.0 * GeV, 7.0 * GeV, 10.0 * GeV, 14.0 * GeV, 20.0 * GeV
     };
 
@@ -65,14 +65,23 @@ PrimaryGeneratorAction::PrimaryGeneratorAction(const std::string &hepmcFile)
         G4ParticleTable::GetParticleTable()->FindParticle("pi+");
 
     fParticleGun->SetParticleDefinition(particleDefinition);
-
 }
 
 void PrimaryGeneratorAction::GeneratePrimaries(G4Event *event)
 {
+    // Uniform pseudorapidity in [-3.5, 3.5]
+    G4double eta = -3.5 + 7.0 * G4UniformRand();
+    G4double phi = 2.0 * CLHEP::pi * G4UniformRand();
+    G4double theta = 2.0 * std::atan(std::exp(-eta));
+
+    G4double px = std::sin(theta) * std::cos(phi);
+    G4double py = std::sin(theta) * std::sin(phi);
+    G4double pz = std::cos(theta);
+
+    fParticleGun->SetParticleMomentumDirection(G4ThreeVector(px, py, pz));
+
     G4double momentum = fPossibleMomenta[std::rand() % fPossibleMomenta.size()];
     fParticleGun->SetParticleMomentum(momentum);
-    fParticleGun->SetParticleMomentumDirection(G4RandomDirection());
     fParticleGun->SetParticlePosition(G4ThreeVector(0., 0., 0.));
     fParticleGun->GeneratePrimaryVertex(event);
     return;

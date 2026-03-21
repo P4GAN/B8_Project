@@ -45,17 +45,44 @@ DetectorMessenger::DetectorMessenger(DetectorConstruction *det) : fDetectorConst
     fResolutionCmd->SetParameterName("resolution", false);
     fResolutionCmd->SetUnitCategory("Length");
     fResolutionCmd->AvailableForStates(G4State_PreInit, G4State_Idle);
+
+    fMaterialWidth1Cmd = new G4UIcmdWithADouble("/det/materialWidth1", this);
+    fMaterialWidth1Cmd->SetGuidance("Set material width of IB layers");
+    fMaterialWidth1Cmd->SetParameterName("materialWidth1", false);
+    fMaterialWidth1Cmd->AvailableForStates(G4State_PreInit, G4State_Idle);
+
+    fMaterialWidth2Cmd = new G4UIcmdWithADouble("/det/materialWidth2", this);
+    fMaterialWidth2Cmd->SetGuidance("Set material width of OB 3 layer and discs");
+    fMaterialWidth2Cmd->SetParameterName("materialWidth2", false);
+    fMaterialWidth2Cmd->AvailableForStates(G4State_PreInit, G4State_Idle);
+
+    fMaterialWidth3Cmd = new G4UIcmdWithADouble("/det/materialWidth3", this);
+    fMaterialWidth3Cmd->SetGuidance("Set material width of OB 4 layer");
+    fMaterialWidth3Cmd->SetParameterName("materialWidth3", false);
+    fMaterialWidth3Cmd->AvailableForStates(G4State_PreInit, G4State_Idle);
 }
 
 DetectorMessenger::~DetectorMessenger()
 {
     delete fResolutionCmd;
     delete fDetDirectory;
+    delete fMaterialWidth1Cmd;
+    delete fMaterialWidth2Cmd;
+    delete fMaterialWidth3Cmd;
 }
 
 void DetectorMessenger::SetNewValue(G4UIcommand *command, G4String newValue)
 {
     if (command == fResolutionCmd) {
         fDetectorConstruction->SetResolution(fResolutionCmd->GetNewDoubleValue(newValue));
+    }
+    if (command == fMaterialWidth1Cmd) {
+        fDetectorConstruction->SetMaterialWidth1(fMaterialWidth1Cmd->GetNewDoubleValue(newValue));
+    }
+    if (command == fMaterialWidth2Cmd) {
+        fDetectorConstruction->SetMaterialWidth2(fMaterialWidth2Cmd->GetNewDoubleValue(newValue));
+    }
+    if (command == fMaterialWidth3Cmd) {
+        fDetectorConstruction->SetMaterialWidth3(fMaterialWidth3Cmd->GetNewDoubleValue(newValue));
     }
 }

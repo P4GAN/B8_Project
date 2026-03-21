@@ -53,6 +53,9 @@ public:
     void ConstructSDandField() override;
     double GetResolution() const { return fDetectorResolution; }
     void SetResolution(G4double val) { fDetectorResolution = val; }
+    void SetMaterialWidth1(G4double val) { fMaterialWidth1 = val; }
+    void SetMaterialWidth2(G4double val) { fMaterialWidth2 = val; }
+    void SetMaterialWidth3(G4double val) { fMaterialWidth3 = val; }
 
 private:
     static G4ThreadLocal G4GlobalMagFieldMessenger* fMagFieldMessenger;
