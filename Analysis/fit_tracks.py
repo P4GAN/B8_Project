@@ -7,7 +7,7 @@ from mpl_toolkits.mplot3d import Axes3D
 import pandas as pd
 import ROOT
 
-from helix_fitting import fit_helix, momentum_from_helix, DCA_from_helix, RMSE
+from helix_fitting import fit_helix
 
 B = 1.7
 min_hits_per_track = 4
@@ -41,30 +41,30 @@ for i in range(num_tracks):
     y = np.array(tracks.HitPositionY)
     z = np.array(tracks.HitPositionZ)
 
-    x_c, y_c, R, tanl, z0, phi = fit_helix(x, y, z)
+    d0, z0, phi0, fitted_pT, tanl = fit_helix(x, y, z, B)
 
-    fitted_pT, fitted_pZ = momentum_from_helix(R, tanl, B)
+    fitted_pZ = tanl * fitted_pT
     fitted_p = np.sqrt(fitted_pT ** 2 + fitted_pZ ** 2)
-    fitted_DCA = DCA_from_helix(x_c, y_c, R)
 
     pX, pY, pZ = tracks.MomentumX, tracks.MomentumY, tracks.MomentumZ
     p = np.sqrt(pX ** 2 + pY ** 2 + pZ ** 2)
-    pT = np.sqrt(pX ** 2 + pY ** 2)
     eta = np.arctanh(pZ / p)
 
     if fitted_p > cutoff_momentum:
         continue
 
     data.append({
-        "True Momentum (MeV/c)": round(p),
-        "True Transverse Momentum (MeV/c)": pT,
-        "True Z Momentum (MeV/c)": pZ,
-        "Fitted Momentum (MeV/c)": fitted_p,
-        "Fitted Transverse Momentum (MeV/c)": fitted_pT,
-        "Fitted Z Momentum (MeV/c)": fitted_pZ,
-        "Pseudorapidity": eta,
-        "DCA (mm)": fitted_DCA,
-        "Number of Hits": tracks.NumHits
+        "True p": round(p),
+        "True pX": pX,
+        "True pY": pY,
+        "True pZ": pZ,
+        "eta": eta,
+        "Fit d0": d0,
+        "Fit z0": z0,
+        "Fit phi0": phi0,
+        "Fit pT": fitted_pT,
+        "Fit tanl": tanl,
+        "NumHits": tracks.NumHits
     })
 
 

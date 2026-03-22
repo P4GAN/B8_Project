@@ -54,44 +54,19 @@ def curvature_sign(x, y, z):
     dir_z = z[-1] - z[0]
     return np.sign(cross_z * dir_z)
 
-# Fit the helix parameters (x_c, y_c, R, tanl, z0) from (x, y, z) points
-# x(phi) = xc + R cos(phi)
-# y(phi) = yc + R sin(phi)
-# z(phi) = z0 + tanl * R * (phi - phi0)
-def fit_helix(x, y, z):
-    x_c, y_c, R = circle_fit(x, y)
-
-    phi = np.unwrap(np.arctan2(y - y_c, x - x_c))
-
-    phi0 = phi[0]
-    s = R * (phi - phi0)  
-
-    A = np.vstack([s, np.ones_like(s)]).T
-    tanl, z0 = np.linalg.lstsq(A, z, rcond=None)[0]
-
-    return x_c, y_c, R, tanl, z0, phi
-
-# Get pT and pz momenta (in MeV/c) from helix parameters
-# Assume all particles have unit charge
-def momentum_from_helix(R, tanl, B):
-    pT = q_e * B * (R * 1e-3) # Convert R from mm to m
-    pZ = pT * tanl
-    return pT * c / (1e6 * q_e), pZ * c / (1e6 * q_e) 
-
-def fit_helix_2(x, y, z, B):
+# Fit the helix parameters (d0, z0, phi0, pT, tanl) from (x, y, z) points
+def fit_helix(x, y, z, B):
     xc, yc, R_abs = karamaki_fit(x, y)
 
     phi_c = np.unwrap(np.arctan2(y - yc, x - xc))
 
     dphi_mean = np.mean(np.diff(phi_c))
-    if np.isclose(dphi_mean, 0.0):
-        raise ValueError("Unable to determine helix rotation direction from hits")
 
     rot_sign = np.sign(dphi_mean)  
 
     R = rot_sign * R_abs
 
-    d0 = np.abs(np.sqrt(xc ** 2 + yc ** 2) - R_abs) 
+    d0 = np.sqrt(xc ** 2 + yc ** 2) - R_abs
 
     phi0 = np.arctan2(-xc, yc)
 
@@ -106,10 +81,6 @@ def fit_helix_2(x, y, z, B):
     pT_MeV = pT * c / (1e6 * q_e)
 
     return d0, z0, phi0, pT_MeV, tanl
-
-# Get DCA from helix parameters, both input and output parameters in mm
-def DCA_from_helix(x_c, y_c, R):
-    return np.abs(np.sqrt(x_c ** 2 + y_c ** 2) - R) 
 
 # Equation of the helix
 def helix(x_c, y_c, z0, pZ, pT, R, phi):

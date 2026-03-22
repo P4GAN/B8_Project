@@ -27,6 +27,6 @@ python Analysis/fit_tracks.py gun_protons.root gun_protons.csv
 python Analysis/fit_tracks.py material_x2.root material_x2.csv
 python Analysis/fit_tracks.py material_x3.root material_x3.csv
 python Analysis/fit_tracks.py material_x4.root material_x4.csv
-python Analysis/fit_tracks.py resolution_4um.root resolution_4um.csv
+python Analysis/fit_tracks.py resolution_3um.root resolution_3um.csv
 python Analysis/fit_tracks.py resolution_15um.root resolution_15um.csv
 python Analysis/fit_tracks.py resolution_25um.root resolution_25um.csv
