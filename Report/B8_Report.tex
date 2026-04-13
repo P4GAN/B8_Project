@@ -1,0 +1,306 @@
+\documentclass[titlepage]{article}[11pt]
+
+\usepackage{amsmath}
+\usepackage{graphicx, float}
+\usepackage{subfig}
+\usepackage{url}
+\usepackage{hyperref}
+\usepackage{natbib}
+\usepackage{braket}
+\usepackage{stix}
+\usepackage{bm}
+\usepackage[separate-uncertainty = true]{siunitx}
+\usepackage[a4paper, top=1.5cm, bottom=2cm, left=1.5cm, right=1.5cm]{geometry}
+\nocite{*}
+
+\renewcommand{\abstractname}{\large Abstract} 
+
+\begin{document}
+
+\begin{titlepage}
+	\centering
+	
+	\title{Simulation studies of different detector designs for the ePIC Silicon Vertex Tracker}
+
+	\author{\parbox{\linewidth}{\centering%
+		\textbf{Candidate Number:} 1616771 \endgraf
+		\textbf{Project Number:} B8\_04 \endgraf
+		\textbf{Supervisor:} Dr Samuel Henry \endgraf
+		}}
+
+	\maketitle
+
+\end{titlepage}
+
+\begin{center}
+	{\Large \textbf{Abstract}}
+\end{center}
+\begin{list}{}{
+	\leftmargin=1cm  
+	\rightmargin=1cm  
+}
+\item 
+Silicon tracking detectors are now a ubiquitous part of high energy particle physics experiments. The simulation of different detector designs is an important step to ensure the final design can achieve the required level of tracking precision. In this study, Geant4 simulations of a simplified model of the ePIC Silicon Vertex Tracker are performed, and a helical fit model is used to reconstruct momenta and vertex position from hit positions. The momentum and position resolution of the detector are tested as different aspects of the design are altered, such as the magnetic field strength, hit position resolution, and material thickness, in order to demonstrate general trends in detector performance.
+\end{list}
+
+\section{Introduction} \label{Introduction}
+Tracking detectors and vertex detectors have become crucial components of many recent particle collider experiments. They allow for the reconstruction of charged particles trajectories in a magnetic field, which can then be used to determine the momentum, charge, and vertex position of the different particles produced in high energy collisions. In modern experiments, the most commonly type of detector for this purpose are semiconductor detectors made from silicon diodes, which create electrical signals when ionising particles travel through the detector. Silicon vertex trackers 
+can be made to have extremely high spatial resolution, as they can be segmented into strips or pixels on the order of micrometres. They also have fast response times, high efficiency, low levels of noise, and can be made to have a low material budget, reducing the impact of scattering, allowing for more accurate tracking. For these reasons, silicon detectors have been used in many high profile particle physics experiments such as the ALICE, ATLAS, CMS and LHCb experiments at the LHC. The focus of this report is the Silicon Vertex Tracker (SVT) which is slated for construction as part of the the future ePIC (Electron-Proton/Ion Collider) experiment at Brookhaven National Laboratory and is expected to become operational in the 2030s.
+
+The EIC (Electron-Ion Collider) will collide beams of electrons and ions/protons at center-of-mass energies of 28--140 GeV and luminosities of \num{e33}--\num{e34} \unit{\per\square\centi\meter\per\second}. It will be the first electron-ion collider with polarised beams (\textasciitilde 70\% polarization) \cite{ABDULKHALEK2022122447}, allowing for new insights into the nature of proton spin. The main purpose of the collider is to further the understanding of the fundamental structure of matter, by studying the properties of the partons (quarks and gluons) which make up the proton. The specific goals are to allow for high precision 3D tomographic imaging of the interior quark-gluon structure of the proton, to solve the mysteries of how the spin and mass of nucleons emerge from partons and their interactions, to investigate quark and gluon confinement, to probe how partons are affected by dense nuclear environments and to discover whether exotic states of matter such as color-glass condensates exist at high gluon densities. In order to achieve these goals, the ePIC experiment requires extremely precise measurements of charged particle momentum and vertex positions in order to successfully construct 3D tomographic images of the proton after deep-inelastic scattering, and to separate vertices produced in the primary collision with vertices produced by the decay of short-lived secondary particles such as charmed mesons. \cite{CIARLANTINI2025170806}.
+
+To ensure the SVT will satisfy these resolution requirements, many different detector designs need to be simulated and tested before the final detector can be built. In this report, we describe a simulation of a simplified model of the SVT, where positive pions are emitted from the origin with different initial momentums, and their transport through the detector is simulated using Geant4. We also describe how the momentum and vertex position are reconstructed from detector hits using a simple helical fit model, and discuss how the momentum and position resolution change as different aspects of the design are tweaked, such as magnetic field strength, hit position resolution, and material thickness.
+
+\section{Theoretical background} \label{Theoretical background}
+
+\subsection{Motion of charged particles in a magnetic field}
+A charged particle in a uniform magnetic field experiences a Lorentz force $F = q(\vec{v} \times \vec{B})$ that causes it to move in a helical trajectory. This helical path depends on the initial position and momentum of the particle, and so uniform magnetic fields are placed in tracking detectors to allow scientists to reconstruct the vertex position and momentum of particles from the track left behind in the detector. We set our coordinates so that the magnetic field and the beamline (the trajectory of the particle beams) are oriented along the $z$-axis with $\vec{B} = B \hat{z}$. After solving the equations of motion,  we find that the particle moves in circular motion in the $xy$-plane, and moves along the $z$ direction at a constant rate. It is useful to parametrise the helical motion with 5 parameters $\left(d_0, \phi_0, z_0, p_T, \tan \lambda \right)$, corresponding to physically significant quantities. Defining the point of closest approach (POCA) as the point when the particle is closest to the $z$-axis, then the parameters correspond to the following:
+
+\begin{itemize}
+	\item $d_0$ is the transverse distance in the $xy$-plane from the particle to the z-axis at the POCA.
+	\item $z_0$ is the z coordinate at the POCA.
+	\item $\phi_0$ is the azimuthal angle of the momentum vector at the POCA.
+	\item $p_T = \sqrt{p_x^2 + p_y^2}$ is the transverse momentum in the $xy$-plane.
+	\item $\tan \lambda = \frac{p_z}{p_T}$ is the tangent of the angle $\lambda$ that the particle's momentum makes with the z-axis.
+\end{itemize}
+
+\noindent
+The radius of the circular motion in the $xy$-plane is given by $R = \frac{p_T}{qB}$, where $q$ is the charge of the particle. We can parametrise the path of the particle in terms of these parameters and the instantaneous azimuthal angle of the momentum vector $\phi$:
+
+\begin{equation}
+	x(\phi) = -d_0 \sin \phi_0 + R \left(\sin \phi - \sin \phi_0 \right)
+\end{equation}
+\begin{equation}
+	y(\phi) = d_0 \cos \phi_0 - R \left(\cos \phi - \cos \phi_0 \right)
+\end{equation}
+\begin{equation}
+	z(\phi) = z_0 + R \left(\phi - \phi_0 \right) \tan \lambda
+\end{equation}
+
+\subsection{Pseudorapidity}
+
+Another quantity of the particle motion that is commonly used in the context of collider experiments is the pseudorapidity $\eta$, which is related to $\theta$, the angle of the particle's momentum relative to the positive $z$-axis. The pseudorapidity is defined as
+
+\begin{equation}
+	\eta = -\ln \left( \tan \frac{\theta}{2} \right)
+\end{equation}
+
+\noindent
+A pseudorapidity of 0 corresponds to a particle travelling perpendicular to the $z$-axis, a pseudorapidity approaching $\infty$ corresponds to a particle travelling in the positive $z$ direction, and a pseudorapidity approaching $-\infty$ corresponds to a particle travelling in the negative $z$ direction.
+
+\subsection{Charged particle interactions in matter} \label{Charged particle interactions in matter} 
+Charged particles travelling through matter typically lose energy from electromagnetic interactions, mainly through ionisation of the atoms in the material, or radiative collisions. For charged particles heavier than electrons and positrons at typical energy scales, energy losses are predominantly due to ionisation and are described by the Bethe-Bloch formula \cite{Leo1987}. In silicon detectors, this ionisation results in the creation of electron-hole pairs which are ultimately responsible for the measured signal. For electrons and positrons, which typically move at relativistic velocities, energy losses are predominantly due to radiative collisions with nuclei (Bremsstrahlung), and the average energy lost per unit length is given by \cite{martin2019nuclear}
+
+\begin{equation}
+	\frac{dE}{dx} = -\frac{E(x)}{X_0}
+\end{equation}
+
+\noindent
+where we have defined the quantity $X_0$ as the radiation length, which describes the typical thickness of a material required to reduce the energy of a relativistic electron to a fraction of $1/e$ of its original energy. A typical approximation for the radiation length of a material made of one type of nucleus is \cite{Leo1987}
+
+\begin{equation}
+	X_0 = \qty{716.4}{\gram \per \square \centi \meter} \cdot \frac{1}{\rho} \frac{A}{Z(Z+1)  \ln{\frac{287}{\sqrt{Z}}}}
+\end{equation}
+
+\noindent
+where $\rho$ is the density of the material in \unit{\gram \per \cubic \centi \meter}, and $Z$, $A$ are the atomic number and mass number of the nucleus. 
+
+The final important interaction of charged particles in matter is multiple Coulomb scattering from atomic nuclei, which causes many small random deviations to the trajectory. The distribution of the total scattered angle is described using Molière theory \cite{PhysRev.89.1256}, but can be described as approximately Gaussian for small angles, with a root mean square width $\theta_0$ approximated by the Highland formula \cite{HIGHLAND1975497} \cite{Lynch:1990sq}
+
+\begin{equation}
+	\theta_0 =  \frac{\qty{13.6}{\mega \electronvolt \per \ensuremath{c}}}{p \beta} z \sqrt{\frac{X}{X_0}} \left(1 + 0.038 \ln{\left(\frac{X}{X_0}\right)} \right) \label{eq:multiple_scattering}
+\end{equation}
+
+\noindent
+where $p$ is the momentum of the particle, $\beta = \frac{v}{c}$ is related to the velocity, $z$ is the charge number of the particle and $\frac{X}{X_0}$ is the thickness of the scattering medium in units of radiation length. The dependence of the scattered angle on $\frac{X}{X_0}$ highlights the importance of having extremely thin detector material for maximum precision.
+
+\subsection{Tracking resolution} \label{TrackingResolution}
+Tracking uncertainty comes from 2 major contributions: the intrinsic uncertainty in detector hit positions, and uncertainties due to multiple scattering. The relative transverse momentum resolution is defined as the uncertainty in $p_T$ divided by $p_T$, and using Gluckstern's treatment \cite{osti_4142694}, the detector uncertainty and multiple scattering contributions are approximately given by 
+
+\begin{equation}
+	\left(\frac{\sigma_{p_T}}{p_T} \right)_{det} \approx p_T \frac{\sigma}{|q| B L^2} \sqrt{A_N}
+\end{equation}
+
+\begin{equation}
+	\left(\frac{\sigma_{p_T}}{p_T} \right)_{MS} \approx \frac{\qty{13.6}{\mega \electronvolt \per \ensuremath{c}}}{|q| B \beta} \sqrt{\frac{C_N}{X_0 L}}
+\end{equation}
+
+\noindent	
+where $\sigma$ is the position uncertainty in hit measurements, $q$ is the charge of the particle, $X_0$ is the weighted average of radiation length through the detector, $L$ is the "lever arm", which is the distance from the innermost detector to the outermost detector, and $A_N$, $C_N$ are geometric constants that depend on the shape and number of detectors. The combined resolution is found by adding the contributions in quadrature so $\frac{\sigma_{p_T}}{p_T}  = \sqrt{\left(\frac{\sigma_{p_T}}{p_T} \right)^2_{det}  + \left(\frac{\sigma_{p_T}}{p_T} \right)^2_{MS}}$. At small momentum, the resolution is dominated by the multiple scattering term, and $\frac{\sigma_{p_T}}{p_T} \propto \frac{1}{p}$, while at large momentum, the resolution is dominated by the intrinsic term and $\frac{\sigma_{p_T}}{p_T} \propto p$. 
+
+\noindent
+Performing a similar treatment for the position resolution of a 2 layer detector \cite{phdthesis}, we find that the uncertainty of the impact parameter $d_0$ is approximately given by
+
+\begin{equation}
+	\sigma_{d_0} \approx \sqrt{ \left( \frac{r_1^2}{(r_2 - r_1)^2} + 1 \right) \sigma^2 + (2r_1 - r_0)^2 \theta_0^2}
+\end{equation}
+
+\noindent
+where $r_0$ is the radius of the beampipe, $r_1$, $r_2$ are radii of the 2 layers, and $\theta_0$ is the angular uncertainty due to multiple scattering mentioned earlier in \ref{eq:multiple_scattering}. The general idea can be extended to more layers, and we see that at small momentum $\sigma_{d_0} \propto \frac{1}{p^2}$, while at large momentum the resolution approaches a constant. 
+
+\subsection{The Silicon Vertex Tracker}
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=1\linewidth]{ePIC_SVT_diagram}
+	\caption{A diagram of the ePIC Central Detector with the tracking detector components magnified on the right}
+	\label{fig:epicsvtdiagram}
+\end{figure}
+
+The ePIC detector contains several specialised components which each play important roles in measuring the properties of particles produced in electron-ion collisions. There are hadronic and electromagnetic calorimeters, which give the most accurate measurement of energies, particle identification detectors, which use Cherenkov radiation and time-of-flight measurements to distinguish between different types of particles, and the tracking system, which utilises both silicon detectors and micro-pattern gas detectors. 
+
+The goal of the Silicon Vertex Tracker is to provide high resolution measurements of the original vertex position of particles, as well as measurements of the momentum. To achieve this, the inner layers need to be positioned as close as possible to the collisions, immediately outside the beampipe, in order to reduce the effects of scattering before reaching the detector. The SVT will use Monolithic Active Pixel Sensors (MAPS), which combine the sensor and readout electronics into the same silicon substrate. After electron-hole pairs are created by charged particles ionising the silicon material, electrons drift toward collection diodes and the charge is converted to a voltage signal which is read out. These allow for the low material budget and high spatial resolution required for the detector, with the sensors having a thickness of \qty{50}{\micro \metre} ($\sim0.05 \% \ \mathrm{X/X_0}$ in units of the radiation length of silicon), and a pixel size of $21 \times 23$ \unit{\micro \metre \squared}. The sensors also use minimal power, allowing for air cooling, minimising the amount of support structures required for electronics and cooling that would contribute to the total material budget.
+
+The SVT will consist of 3 inner barrel (IB) segments and 2 outer barrel (OB) segments which cover the low pseudorapidity regions ($-1 \leq \eta \leq 1$), as well as 10 endcap discs (5 on the hadron side and 5 on the electron side) covering the high pseudorapidity regions ($1 \leq |\eta| \leq 3.5$). The endcap discs are also positioned slightly asymmetrically, in order to account for the vastly different energies of the electron and ion beams (\qty{18}{\giga \electronvolt} and \qty{275}{\giga \electronvolt} respectively), which result in different pseudorapidity distributions in the forward and backward regions. The planned material budget is 0.07\% $\mathrm{X/X_0}$ per layer in the IB, 0.25\% $\mathrm{X/X_0}$ in OB layer 3 and in the endcap discs, and 0.55\% $\mathrm{X/X_0}$ in OB layer 4.
+
+\section{Geant4 simulation} \label{Method}
+In this section we describe the computational procedure for simulations of particles in the detector. These simulations use Geant4, which is a C++ toolkit that simulates the passage of particles and radiation through matter using Monte Carlo methods, including possible physics interactions such as those described in Section \ref{Charged particle interactions in matter}, as well as decays and production of secondary particles. In these simulations we use the standard \verb|FTFP_BERT| physics list to simulate hadronic and electromagnetic interactions.
+
+\subsection{Detector geometry}
+A simplified model of the ePIC SVT was constructed that approximates the major dimensions of the silicon detectors without incorporating finer details. For example, in the SVT, the outer barrel layers will not be perfectly cylindrical, but will consist of staves placed at alternating radii, whereas in our simulation we have assumed these layers to be cylindrical for simplicity. The detector layers were constructed as solid cylinders of silicon, with thicknesses of \qty{50}{\micro \metre} and other dimensions specified in Tables \ref{tab:barrel} \ref{tab:hadronendcaps} \ref{tab:electronendcaps}. The specific shapes of cooling, electrical, and other support structures was not considered, and instead layers of copper material were placed surrounding the silicon layers to approximate the effect of supporting material. The thickness of the copper was determined such that the combined radiation length of the silicon and copper matched the total planned material budget of the specified layer. Copper was chosen as a representative support material, as it will be commonly found in the electrical wiring of the SVT. Since multiple scattering depends primarily on the radiation length, the shape and type of supporting material are less important than the overall $\mathrm{X/X_0}$ per layer. A beryllium beampipe was also placed in the simulation, with a radius of \qty{31}{\milli \metre} and a thickness of \qty{7.57}{\milli \metre}. Inside the beampipe, the material was set to be vacuum, and in the rest of the geometry the material was set to be air. A uniform magnetic field of \qty{1.7}{\tesla} along the positive $z$ direction was also added.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.9\linewidth]{detector_layout}
+	\caption{$rz$-diagram of the detector layout with lines of constant pseudorapidity indicated}
+	\label{fig:detectorlayout}
+\end{figure}
+
+\begin{table}[H]
+	\centering
+	\begin{tabular}{|c|c|c|c|}
+		\hline
+		\textbf{Layer} & \textbf{Radii (mm)} & \textbf{Length (mm)} & \textbf{X/X\_0\%} \\ \hline
+		IB 0                  & 38                  & 270                  & 0.07              \\ \hline
+		IB 1                  & 50                  & 270                  & 0.07              \\ \hline
+		IB 2                  & 122                 & 270                  & 0.07              \\ \hline
+		OB 3                  & 272                 & 540                  & 0.25              \\ \hline
+		OB 4                  & 422                 & 800                  & 0.55              \\ \hline
+	\end{tabular}
+	\caption{Dimensions of the inner barrel and outer barrel layers}
+	\label{tab:barrel}
+\end{table}
+
+\begin{table}[H]
+	\small
+	\begin{minipage}{0.5\textwidth}
+		\centering
+		\begin{tabular}{|c|c|c|}
+			\hline
+			\textbf{Z position (mm)} & \textbf{Inner Radii (mm)} & \textbf{Outer Radii (mm)} \\ \hline
+			250                      & 36.76                     & 230                       \\ \hline
+			450                      & 36.76                     & 430                       \\ \hline
+			700                      & 38.42                     & 430                       \\ \hline
+			1000                     & 54.43                     & 430                       \\ \hline
+			1350                     & 70.14                     & 430                       \\ \hline
+		\end{tabular}
+			\caption{Dimensions of the hadron endcap disks}
+		\label{tab:hadronendcaps}
+	\end{minipage}
+	\begin{minipage}{0.5\textwidth}
+		\centering
+		\begin{tabular}{|c|c|c|}
+			\hline
+			\textbf{Z position (mm)} & \textbf{Inner Radii (mm)} & \textbf{Outer Radii (mm)} \\ \hline
+			-250                     & 36.76                     & 230                       \\ \hline
+			-450                     & 36.76                     & 430                       \\ \hline
+			-650                     & 36.76                     & 430                       \\ \hline
+			-850                     & 40.06                     & 430                       \\ \hline
+			-1050                    & 46.35                     & 430                       \\ \hline
+		\end{tabular}
+		\caption{Dimensions of the electron endcap disks}
+		\label{tab:electronendcaps}
+	\end{minipage}
+\end{table}
+
+\subsection{Particle generation}
+Pythia8 is a C++ program to simulate the results of high energy particle collisions. A Pythia8 simulation of a \qty{275}{\giga \electronvolt} proton and \qty{18}{\giga \electronvolt} electron collision was performed to establish an understanding of the types of particles that might be produced in a typical collision at the EIC.
+
+ \begin{figure}[H]
+ 	\centering
+ 	\includegraphics[width=0.8\linewidth]{particle_abundances}
+ 	\caption{Frequency of final state particles produced in the $p + e^-$ collision}
+ 	\label{fig:particleabundances}
+ \end{figure}
+ 
+ \noindent
+ With a sample size of $n=1000$ collisions, the most common types of final state charged particles produced in the collision were pions as shown in Figure \ref{fig:particleabundances}. Therefore in this simulation, we chose to use positive pions, which were emitted from the origin using the \verb|G4ParticleGun| class, at different values of momentum from \qty{150}{\mega \electronvolt} to \qty{20}{\giga \electronvolt}, and with a uniform distribution of pseudorapidities from $-3.5 \leq \eta \leq 3.5$.
+
+\subsection{Detector Hits}
+The silicon volumes use the \verb|G4VSensitiveDetector| class, so that charged particles that deposit energy in these volumes could potentially register hits in the detectors. Two checks occur in the \verb|ProcessHits| method to determine whether a hit was recorded. First, we check if the energy deposited is above an arbitrary threshold of \qty{1}{\kilo \electronvolt} (on the order of a few hundred electron-hole pairs). Then there is a random probability for the hit to be ignored, corresponding to the intrinsic detector efficiency (taken to be 99\%), which accounts for possible effects such as inactive pixels or faulty electronics. Before recording the measured hit position, we need to account for the intrinsic hit resolution due to the effects of digitisation. In the SVT, a single particle will typically produce hundreds of electron-hole pairs, which deposit different amounts of charge on multiple nearby pixels, with the hit position taken to be the centroid position of the activated pixels. There is also an uncertainty in position due to the finite size of each pixel. In this simulation, we make the simplifying assumption that these combined effect of charge clustering and pixelation can be approximated with by applying a Gaussian smear to the measurement of the hit position, with a standard deviation of \qty{7}{\micro \metre}. We also only record hits that correspond to the emitted pion, and ignore any hits due to secondary particles for simplification. The smeared hit positions are saved to a ROOT file, along with the true momenta of the original pions, for later analysis.
+
+\section{Track fitting}
+Once the particles have made hits in the detector, the goal is to reconstruct their trajectories, or "tracks" from the detector hits, and determine their vertex positions and momenta. In a real collider experiment, a single collision may produce hundreds of particles, and often there may be many collisions occurring at a time, which introduces the additional challenge of having to determine which hits correspond to which particles. Although this "track finding" step is important for real particle physics experiments, track finding efficiency is typically determined by the algorithms used, not the intrinsic detector design. For this report, we only look at the track fitting step of determining the vertex position and momentum from the hits of a single particle using a simple helical fit model.
+
+\subsection{Helical fit model}
+First we fit the $xy$ coordinates to a circle using Karimäki's method \cite{Karimaki:1990zz}, which approximately minimises the least squares distance between the points and the fitted circle. From this fit we find $d_0$, $\phi_0$ and the radius of the circle $R$, which is used to calculate $p_T$. We calculate the value of $\phi$ at each point, and use it to fit $z$ against $R (\phi - \phi_0)$ using a simple linear least squares fit to find $z_0$ and $\tan \lambda$. We also have to be concerned about whether the helix is rotating clockwise or counterclockwise, which we do by checking the azimuthal angle of consecutive hit positions, and then using this to adjust the sign of $R$.
+
+\subsection{Measuring tracking resolution}
+After fitting helix parameters for each track, we find the resolution of different helix parameters by computing their uncertainties. However since many of these parameters have long tailed distributions due to multiple scattering effects, instead of directly computing the standard deviation, for each parameter we fit a Gaussian distribution to the histogram and extract the uncertainty. The fitting interval is 2 standard deviations around the mean value. For the transverse momentum resolution, we calculate the residual $\frac{p_{T,\mathrm{fit}} - p_{T,\mathrm{true}}}{p_{T,\mathrm{true}}}$ for each track, and fit the Gaussian to the histogram of these residuals, with the transverse momentum resolution $\frac{\sigma_{p_T}}{p_T}$ measured as the standard deviation of this Gaussian fit.
+
+\section{Results} \label{Results}
+
+\subsection{Tracking resolution vs momentum and pseudorapidity}
+Here we have simulated the default detector configuration with a sample size of $n=500000$, and plotted the momentum resolution ($p_T$ and $p$), vertex resolution ($d_0$ and $z_0$), and angular resolution ($\phi_0$ and $\theta$). In Figure \ref{fig:parametersvsp}, we plot the resolution against the true momentum of the particles, separated into different $\eta$ bins corresponding to the barrels ($-1 \leq \eta \leq 1$) and endcaps ($1 \leq |\eta| \leq 3$). In Figure \ref{fig:parametersvseta}, we plot the resolution against the pseudorapidity $\eta$ for different values of momentum from \qty{2}{\giga \electronvolt} to \qty{20}{\giga \electronvolt}.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=1\linewidth]{parameters_vs_p}
+	\caption{Resolution of different parameters as a function of momentum, for different $\eta$ bins}
+	\label{fig:parametersvsp}
+\end{figure}
+
+From Figure \ref{fig:parametersvsp}, we observe the trend that for small momenta, the momentum resolution behaves as $\frac{1}{p}$, while for large momenta, the momentum resolution is linear to momentum which matches Gluckstern's theory as expected from the discussion in Section \ref{TrackingResolution}. We also notice that for the angular and position resolution, the measurement uncertainty decreases with increasing momentum.
+
+From Figure \ref{fig:parametersvseta}, we observe that the resolution is best for small values of $|\eta|$, but gets worse for larger values of $|\eta|$. This is because for larger $|\eta|$ particles travel through more material, increasing the impact of multiple scattering.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.95\linewidth]{parameters_vs_eta}
+	\caption{Resolution of different parameters as a function of $\eta$, for different momentum values}
+	\label{fig:parametersvseta}
+\end{figure}
+
+\subsection{Tracking resolution vs hit resolution}
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.95\linewidth]{resolution_vs_resolution}
+	\caption{Momentum and position resolution resolution vs momentum in different $\eta$ bins, for different values of detector resolution}
+	\label{fig:resolutionvsresolution}
+\end{figure}
+
+For this simulation, we changed the intrinsic spatial resolution of the detector, which mimics the effect of changing the pixel size. Each different value of hit resolution ran with a sample size of $n=500000$. As expected, there is no effect at low momentum in the multiple scattering regime, but the resolution becomes significantly affected once we are in the high momentum regime, where the resolution is dominated by the intrinsic detector uncertainty.
+
+\subsection{Tracking resolution vs material thickness}
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=1\linewidth]{resolution_vs_thickness}
+	\caption{Momentum and position resolution resolution vs momentum in different $\eta$ bins, for different material thicknesses}
+	\label{fig:resolutionvsthickness}
+\end{figure}
+
+For this simulation, we varied the material thicknesses of the detector layers, which are originally  0.07\% $\mathrm{X/X_0}$ per layer in the IB, 0.25\% $\mathrm{X/X_0}$ in OB layer 3 and in the endcap discs, and 0.55\% $\mathrm{X/X_0}$ in OB layer 4. We ran the simulation with 1x, 2x, 3x and 4x the usual material thicknesses, each with a sample size of $n=500000$. For each simulation, we kept the silicon thickness the same at \qty{50}{\micro \metre}, but adjusted the amount of surrounding copper material to fill up to the specified material thickness. As seen in Figure \ref{fig:resolutionvsthickness}, increasing the material thickness makes the measured momentum and vertex position less precise as expected.
+
+
+\subsection{Tracking resolution vs magnetic field}
+For this simulation, we varied the strength of the magnetic field present in the detector, running a sample size of $n=500000$ for each value of magnetic field. As expected from Section \ref{TrackingResolution}, there was no noticeable impact on the position resolution, however from Figure \ref{fig:resolutionvsb} we see that a stronger magnetic field leads to more precise momentum measurement.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=1\linewidth]{resolution_vs_B}
+	\caption{Momentum and position resolution resolution vs momentum in different $\eta$ bins, for different values of magnetic field}
+	\label{fig:resolutionvsb}
+\end{figure}
+
+\section{Conclusion}  \label{Conclusion}
+The passage of pions through a simplified model of the ePIC SVT was simulated using Geant4, and the helical track was reconstructed from hit positions in order to evaluate the momentum and position resolution of different detector designs. We found that most track parameters are measured more precisely at high momentum, whilst the momentum resolution followed the expected trend established by Gluckstern's theory with different behaviours for the high and low momentum regimes. We also found that most track parameters were measured more precisely for low pseudorapidities, due to having to travel through less material.
+
+We also measured the momentum and position resolutions after adjusting parameters of the detector design, and from these results we can establish that one of the most important factors for detector design is minimising the material budget, as this strongly affects resolution across all the entire range of momentum. A large magnetic field is also important for reducing the momentum uncertainty, however doesn't affect the position uncertainty at all. Reducing the intrinsic detector resolution is also important for precise measurements at high momentum.
+
+We acknowledge that the in the methodology carried out in this report we have made many simplifications that prevent this from being a truly accurate simulation of the ePIC SVT. For future simulations, we could use DD4HEP to import the precise geometry specifications of the detector design, implement a more accurate hit digitisation model, and use a Kalman filter for track fitting, which is a more accurate track fitting algorithm that more closely matches what would be used in actual experiments. Future work could also be aimed at implementing track finding algorithms, such as the Combinatorial Kalman Filter (CKF), in order to evaluate the efficiency (ratio of correctly reconstructed tracks to total number of particles) and fake rate (the fraction of incorrectly reconstructed tracks) of different detector designs. Another possible future task could be to investigate the impact of adding more detector layers, or changing the position of detector layers in order to further optimise the detector design.
+
+\bibliographystyle{unsrt}
+\bibliography{references.bib}
+	
+\end{document}

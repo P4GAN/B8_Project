@@ -1,0 +1,60 @@
+\begin{thebibliography}{10}
+
+\bibitem{ABDULKHALEK2022122447}
+R.~Abdul Khalek et~al.
+\newblock {Science Requirements and Detector Concepts for the Electron-Ion
+  Collider: EIC Yellow Report}.
+\newblock {\em Nuclear Physics A}, 1026:122447, 2022.
+
+\bibitem{CIARLANTINI2025170806}
+Sabrina Ciarlantini.
+\newblock {The ePIC Silicon Vertex Tracker IB-OB: Design and thermal-mechanical
+  simulations}.
+\newblock {\em Nuclear Instruments and Methods in Physics Research Section A:
+  Accelerators, Spectrometers, Detectors and Associated Equipment},
+  1080:170806, 2025.
+
+\bibitem{Leo1987}
+W.~R. Leo.
+\newblock {\em {Techniques for Nuclear and Particle Physics Experiments: A How
+  to Approach}}.
+\newblock 1987.
+
+\bibitem{martin2019nuclear}
+Brian~R Martin and Graham Shaw.
+\newblock {\em {Nuclear and Particle Physics: An Introduction}}.
+\newblock 3rd edition, 2019.
+
+\bibitem{PhysRev.89.1256}
+H.~A. Bethe.
+\newblock {Molière's Theory of Multiple Scattering}.
+\newblock {\em Phys. Rev.}, 89:1256--1266, Mar 1953.
+
+\bibitem{HIGHLAND1975497}
+Virgil~L. Highland.
+\newblock {Some practical remarks on multiple scattering}.
+\newblock {\em {Nuclear Instruments and Methods}}, 129(2):497--499, 1975.
+
+\bibitem{Lynch:1990sq}
+Gerald~R. Lynch and Orin~I. Dahl.
+\newblock {Approximations to multiple Coulomb scattering}.
+\newblock {\em Nucl. Instrum. Meth. B}, 58:6--10, 1991.
+
+\bibitem{osti_4142694}
+R~L Gluckstern.
+\newblock Uncertainties in track momentum and direction, due to multiple
+  scattering and measurement errors.
+\newblock {\em nucl. Instr. Methods}, Vol: 24, 10 1963.
+
+\bibitem{phdthesis}
+Håkan Wennlöf.
+\newblock {\em Development of a silicon vertex tracker for the electron-ion
+  collider}.
+\newblock PhD thesis, 06 2021.
+
+\bibitem{Karimaki:1990zz}
+Veikko Karimaki.
+\newblock {Effective circle fitting for particle trajectories}.
+\newblock {\em Nucl. Instrum. Meth. A}, 305:187--191, 1991.
+
+\end{thebibliography}
