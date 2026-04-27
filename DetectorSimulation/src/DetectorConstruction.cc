@@ -88,13 +88,8 @@ G4VPhysicalVolume *DetectorConstruction::Construct()
     trackerVisAtt.SetVisibility(true);
     trackerVisAtt.SetForceSolid(true);
 
-    // Green for copper support material
-    G4VisAttributes supportVisAtt(G4Colour(0.0, 1.0, 0.0, 0.7));
-    supportVisAtt.SetVisibility(true);
-    supportVisAtt.SetForceSolid(true);
-
     // Grey for beam pipe
-    G4VisAttributes beamPipeVisAtt(G4Colour(1.0, 1.0, 1.0, 0.5));
+    G4VisAttributes beamPipeVisAtt(G4Colour(1.0, 1.0, 1.0, 0.7));
     beamPipeVisAtt.SetVisibility(true);
     beamPipeVisAtt.SetForceSolid(true);
 
@@ -173,7 +168,7 @@ G4VPhysicalVolume *DetectorConstruction::Construct()
                                              barrelLengths[i] / 2, 0. * deg, 360. * deg);
         auto supportBarrelLV = new G4LogicalVolume(supportBarrelShape, copper, name + "_LV",
                                                    nullptr, nullptr, nullptr);
-        supportBarrelLV->SetVisAttributes(supportVisAtt);
+        supportBarrelLV->SetVisAttributes(trackerVisAtt);
         new G4PVPlacement(nullptr, G4ThreeVector(0, 0, 0), supportBarrelLV, name + "_PV",
                           worldLV, false, i, true);
 
@@ -199,7 +194,7 @@ G4VPhysicalVolume *DetectorConstruction::Construct()
                        siWidth / 2 + discCuWidth / 2, 0. * deg, 360. * deg);
         auto supportDiscLV = new G4LogicalVolume(supportDiscShape, copper, name + "_LV", nullptr,
                                                  nullptr, nullptr);
-        supportDiscLV->SetVisAttributes(supportVisAtt);
+        supportDiscLV->SetVisAttributes(trackerVisAtt);
         new G4PVPlacement(nullptr, G4ThreeVector(0, 0, discZPositions[i]), supportDiscLV,
                           name + "_PV", worldLV, false, numBarrels + i, true);
 

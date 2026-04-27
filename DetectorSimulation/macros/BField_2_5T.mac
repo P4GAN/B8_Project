@@ -4,7 +4,7 @@
 # Default material thickness (0.07%, 0.25%, 0.55%)
 # Hit resolution: 7 micrometres
 # pi+ gun
-# 500000 runs
+# 5000000 runs
 
 /det/materialWidth1 0.0007
 /det/materialWidth2 0.0025
@@ -17,4 +17,4 @@
 /globalField/setValue 0 0 2.5 tesla
 
 /gun/particle pi+
-/run/beamOn 500000
+/run/beamOn 5000000

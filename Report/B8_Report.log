@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.26 (TeX Live 2024) (preloaded format=pdflatex 2024.11.20)  10 APR 2026 19:38
+This is pdfTeX, Version 3.141592653-2.6-1.40.26 (TeX Live 2024) (preloaded format=pdflatex 2024.11.20)  27 APR 2026 09:33
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -123,9 +123,6 @@ Package: float 2001/11/08 v1.3d Float enhancements (AL)
 \@float@everytoks=\toks24
 \@floatcapt=\box54
 )
-(/usr/local/texlive/2024/texmf-dist/tex/latex/subfig/subfig.sty
-Package: subfig 2005/06/28 ver: 1.3 subfig package
-
 (/usr/local/texlive/2024/texmf-dist/tex/latex/caption/caption.sty
 Package: caption 2023/08/05 v3.6o Customizing captions (AR)
 
@@ -145,6 +142,8 @@ Package caption Info: Standard document class detected.
 \c@continuedfloat=\count276
 Package caption Info: float package is loaded.
 )
+(/usr/local/texlive/2024/texmf-dist/tex/latex/subfig/subfig.sty
+Package: subfig 2005/06/28 ver: 1.3 subfig package
 \c@KVtest=\count277
 \sf@farskip=\skip53
 \sf@captopadj=\dimen160
@@ -486,7 +485,7 @@ Package: ifvtex 2019/10/25 v1.7 ifvtex legacy package. Use iftex instead.
 )
 \citation{*}
 Package translations Info: No language package found. I am going to use `englis
-h' as default language. on input line 18.
+h' as default language. on input line 19.
 (/usr/local/texlive/2024/texmf-dist/tex/latex/graphics/color.sty
 Package: color 2022/01/06 v1.3d Standard LaTeX Color (DPC)
 
@@ -497,7 +496,7 @@ Package color Info: Driver file: pdftex.def on input line 149.
 
 (/usr/local/texlive/2024/texmf-dist/tex/latex/graphics/mathcolor.ltx))
 LaTeX Font Info:    Trying to load font information for T1+stix on input line 1
-8.
+9.
 
 (/usr/local/texlive/2024/texmf-dist/tex/latex/stix/t1stix.fd
 File: t1stix.fd 2015/04/17 v1.1.2-latex STIX T1 font definitions
@@ -510,40 +509,40 @@ File: l3backend-pdftex.def 2024-02-20 L3 backend support: PDF output (pdfTeX)
 (./B8_Report.aux)
 \openout1 = `B8_Report.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 18.
-LaTeX Font Info:    ... okay on input line 18.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 18.
-LaTeX Font Info:    ... okay on input line 18.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 18.
-LaTeX Font Info:    ... okay on input line 18.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 18.
-LaTeX Font Info:    ... okay on input line 18.
-LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 18.
-LaTeX Font Info:    ... okay on input line 18.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 18.
-LaTeX Font Info:    ... okay on input line 18.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 18.
-LaTeX Font Info:    ... okay on input line 18.
-LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 18.
-LaTeX Font Info:    ... okay on input line 18.
-LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 18.
-LaTeX Font Info:    ... okay on input line 18.
-LaTeX Font Info:    Checking defaults for LS1/stix/m/n on input line 18.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 19.
+LaTeX Font Info:    ... okay on input line 19.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 19.
+LaTeX Font Info:    ... okay on input line 19.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 19.
+LaTeX Font Info:    ... okay on input line 19.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 19.
+LaTeX Font Info:    ... okay on input line 19.
+LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 19.
+LaTeX Font Info:    ... okay on input line 19.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 19.
+LaTeX Font Info:    ... okay on input line 19.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 19.
+LaTeX Font Info:    ... okay on input line 19.
+LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 19.
+LaTeX Font Info:    ... okay on input line 19.
+LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 19.
+LaTeX Font Info:    ... okay on input line 19.
+LaTeX Font Info:    Checking defaults for LS1/stix/m/n on input line 19.
 LaTeX Font Info:    Trying to load font information for LS1+stix on input line 
-18.
+19.
  (/usr/local/texlive/2024/texmf-dist/tex/latex/stix/ls1stix.fd
 File: ls1stix.fd 2015/04/17 v1.1.2-latex STIX LS1 font definitions
 )
-LaTeX Font Info:    ... okay on input line 18.
-LaTeX Font Info:    Checking defaults for LS2/stix/m/n on input line 18.
+LaTeX Font Info:    ... okay on input line 19.
+LaTeX Font Info:    Checking defaults for LS2/stix/m/n on input line 19.
 LaTeX Font Info:    Trying to load font information for LS2+stix on input line 
-18.
+19.
  (/usr/local/texlive/2024/texmf-dist/tex/latex/stix/ls2stix.fd
 File: ls2stix.fd 2015/04/17 v1.1.2-latex STIX LS2 font definitions
 )
-LaTeX Font Info:    ... okay on input line 18.
-LaTeX Info: Command `\dddot' is already robust on input line 18.
-LaTeX Info: Command `\ddddot' is already robust on input line 18.
+LaTeX Font Info:    ... okay on input line 19.
+LaTeX Info: Command `\dddot' is already robust on input line 19.
+LaTeX Info: Command `\ddddot' is already robust on input line 19.
 
 (/usr/local/texlive/2024/texmf-dist/tex/context/base/mkii/supp-pdf.mkii
 [Loading MPS to PDF converter (version 2006.09.02).]
@@ -571,7 +570,7 @@ Package caption Info: Begin \AtBeginDocument code.
 Package caption Info: subfig package v1.3 is loaded.
 Package caption Info: hyperref package is loaded.
 Package caption Info: End \AtBeginDocument code.
-Package hyperref Info: Link coloring OFF on input line 18.
+Package hyperref Info: Link coloring OFF on input line 19.
 
 (./B8_Report.out) (./B8_Report.out)
 \@outlinefile=\write3
@@ -584,7 +583,7 @@ File: translations-basic-dictionary-english.trsl (english translation file `tra
 nslations-basic-dictionary')
 )
 Package translations Info: loading dictionary `translations-basic-dictionary' f
-or `english'. on input line 18.
+or `english'. on input line 19.
 
 *geometry* driver: auto-detecting
 *geometry* detected driver: pdftex
@@ -621,52 +620,52 @@ or `english'. on input line 18.
 * (1in=72.27pt=25.4mm, 1cm=28.453pt)
 
 LaTeX Font Info:    Trying to load font information for LS1+stixscr on input li
-ne 32.
+ne 33.
 (/usr/local/texlive/2024/texmf-dist/tex/latex/stix/ls1stixscr.fd
 File: ls1stixscr.fd 2015/04/17 v1.1.2-latex STIX script LS1 font definitions
 )
 LaTeX Font Info:    Trying to load font information for LS2+stixex on input lin
-e 32.
+e 33.
 
 (/usr/local/texlive/2024/texmf-dist/tex/latex/stix/ls2stixex.fd
 File: ls2stixex.fd 2015/04/17 v1.1.2-latex STIX extentions LS2 font definitions
 
 )
 LaTeX Font Info:    Trying to load font information for LS1+stixfrak on input l
-ine 32.
+ine 33.
 
 (/usr/local/texlive/2024/texmf-dist/tex/latex/stix/ls1stixfrak.fd
 File: ls1stixfrak.fd 2015/04/17 v1.1.2-latex STIX fraktur LS1 font definitions
 )
 LaTeX Font Info:    Trying to load font information for LS1+stixbb on input lin
-e 32.
+e 33.
 
 (/usr/local/texlive/2024/texmf-dist/tex/latex/stix/ls1stixbb.fd
 File: ls1stixbb.fd 2015/04/17 v1.1.2-latex STIX blackboard LS1 font definitions
 
 )
 LaTeX Font Info:    Trying to load font information for LS2+stixcal on input li
-ne 32.
+ne 33.
 
 (/usr/local/texlive/2024/texmf-dist/tex/latex/stix/ls2stixcal.fd
 File: ls2stixcal.fd 2015/04/17 v1.1.2-latex STIX calligraphic LS2 font definiti
 ons
 )
 LaTeX Font Info:    Trying to load font information for LS1+stixsf on input lin
-e 32.
+e 33.
 
 (/usr/local/texlive/2024/texmf-dist/tex/latex/stix/ls1stixsf.fd
 File: ls1stixsf.fd 2015/04/17 v1.1.2-latex STIX sans-serif LS1 font definitions
 
 )
 LaTeX Font Info:    Trying to load font information for LS2+stixtt on input lin
-e 32.
+e 33.
 
 (/usr/local/texlive/2024/texmf-dist/tex/latex/stix/ls2stixtt.fd
 File: ls2stixtt.fd 2015/04/17 v1.1.2-latex STIX typewriter LS2 font definitions
 
 )
-Overfull \hbox (12.00002pt too wide) in paragraph at lines 32--32
+Overfull \hbox (12.00002pt too wide) in paragraph at lines 33--33
  [][] 
  []
 
@@ -674,106 +673,112 @@ Overfull \hbox (12.00002pt too wide) in paragraph at lines 32--32
 
 {/usr/local/texlive/2024/texmf-var/fonts/map/pdftex/updmap/pdftex.map}{/usr/loc
 al/texlive/2024/texmf-dist/fonts/enc/dvips/stix/stix-t1.enc}]
-LaTeX Font Info:    Trying to load font information for TS1+stix on input line 
-60.
+LaTeX Font Info:    Trying to load font information for T1+cmtt on input line 5
+8.
 
-(/usr/local/texlive/2024/texmf-dist/tex/latex/stix/ts1stix.fd
-File: ts1stix.fd 2015/04/17 v1.1.2-latex STIX TS1 font definitions
+(/usr/local/texlive/2024/texmf-dist/tex/latex/base/t1cmtt.fd
+File: t1cmtt.fd 2023/04/13 v2.5m Standard LaTeX font definitions
 )
+<ePIC_SVT_diagram.png, id=78, 6057.63126pt x 1595.9625pt>
+File: ePIC_SVT_diagram.png Graphic file (type png)
+<use ePIC_SVT_diagram.png>
+Package pdftex.def Info: ePIC_SVT_diagram.png  used on input line 64.
+(pdftex.def)             Requested size: 512.14963pt x 134.91226pt.
+
 pdfTeX warning (ext4): destination with the same identifier (name{page.1}) has 
 been already used, duplicate ignored
 <to be read again> 
                    \relax 
-l.69 
-      [1{/usr/local/texlive/2024/texmf-dist/fonts/enc/dvips/stix/stix-ts1.enc}]
-[2]
-<ePIC_SVT_diagram.png, id=130, 6057.63126pt x 1595.9625pt>
-File: ePIC_SVT_diagram.png Graphic file (type png)
-<use ePIC_SVT_diagram.png>
-Package pdftex.def Info: ePIC_SVT_diagram.png  used on input line 144.
-(pdftex.def)             Requested size: 512.14963pt x 134.91226pt.
-LaTeX Font Info:    Trying to load font information for T1+cmtt on input line 1
-56.
- (/usr/local/texlive/2024/texmf-dist/tex/latex/base/t1cmtt.fd
-File: t1cmtt.fd 2023/04/13 v2.5m Standard LaTeX font definitions
-) [3 <./ePIC_SVT_diagram.png>]
-<detector_layout.png, id=144, 1394.20876pt x 792.9625pt>
+l.68 
+      [1{/usr/local/texlive/2024/texmf-dist/fonts/enc/dvips/cm-super/cm-super-t
+1.enc}]
+LaTeX Font Info:    Trying to load font information for TS1+stix on input line 
+71.
+ (/usr/local/texlive/2024/texmf-dist/tex/latex/stix/ts1stix.fd
+File: ts1stix.fd 2015/04/17 v1.1.2-latex STIX TS1 font definitions
+)
+<detector_layout.png, id=91, 1394.20876pt x 792.9625pt>
 File: detector_layout.png Graphic file (type png)
 <use detector_layout.png>
-Package pdftex.def Info: detector_layout.png  used on input line 163.
-(pdftex.def)             Requested size: 460.93153pt x 262.15031pt.
-
-Overfull \hbox (1.503pt too wide) in paragraph at lines 185--213
-[]$[]$ $[]$ 
- []
-
-[4{/usr/local/texlive/2024/texmf-dist/fonts/enc/dvips/cm-super/cm-super-t1.enc}
- <./detector_layout.png>]
-<particle_abundances.png, id=155, 992.70876pt x 491.8375pt>
+Package pdftex.def Info: detector_layout.png  used on input line 79.
+(pdftex.def)             Requested size: 409.72125pt x 233.02654pt.
+ [2{/usr/local/texlive/2024/texmf-dist/fonts/enc/dvips/stix/stix-ts1.enc} <./eP
+IC_SVT_diagram.png> <./detector_layout.png>]
+<particle_abundances.png, id=109, 992.70876pt x 491.8375pt>
 File: particle_abundances.png Graphic file (type png)
 <use particle_abundances.png>
-Package pdftex.def Info: particle_abundances.png  used on input line 220.
-(pdftex.def)             Requested size: 409.72125pt x 202.99803pt.
- [5 <./particle_abundances.png>]
-<parameters_vs_p.png, id=167, 1492.57625pt x 949.5475pt>
+Package pdftex.def Info: particle_abundances.png  used on input line 93.
+(pdftex.def)             Requested size: 358.50317pt x 177.61671pt.
+<geant4_screenshot.png, id=111, 1581.91pt x 572.1375pt>
+File: geant4_screenshot.png Graphic file (type png)
+<use geant4_screenshot.png>
+Package pdftex.def Info: geant4_screenshot.png  used on input line 103.
+(pdftex.def)             Requested size: 512.14963pt x 185.23534pt.
+ [3 <./particle_abundances.png> <./geant4_screenshot.png>] [4] [5]
+<gaussian_histogram_fit.png, id=169, 576.1525pt x 460.72125pt>
+File: gaussian_histogram_fit.png Graphic file (type png)
+<use gaussian_histogram_fit.png>
+Package pdftex.def Info: gaussian_histogram_fit.png  used on input line 207.
+(pdftex.def)             Requested size: 358.50317pt x 286.68466pt.
+ [6 <./gaussian_histogram_fit.png>]
+<parameters_vs_p.png, id=181, 1492.57625pt x 949.5475pt>
 File: parameters_vs_p.png Graphic file (type png)
 <use parameters_vs_p.png>
-Package pdftex.def Info: parameters_vs_p.png  used on input line 247.
+Package pdftex.def Info: parameters_vs_p.png  used on input line 224.
 (pdftex.def)             Requested size: 512.14963pt x 325.8121pt.
- [6 <./parameters_vs_p.png>]
-<parameters_vs_eta.png, id=180, 1494.58376pt x 979.66pt>
+<parameters_vs_eta.png, id=183, 1494.58376pt x 981.6675pt>
 File: parameters_vs_eta.png Graphic file (type png)
 <use parameters_vs_eta.png>
-Package pdftex.def Info: parameters_vs_eta.png  used on input line 258.
-(pdftex.def)             Requested size: 486.54057pt x 318.90892pt.
-<resolution_vs_resolution.png, id=181, 1494.58376pt x 949.5475pt>
+Package pdftex.def Info: parameters_vs_eta.png  used on input line 233.
+(pdftex.def)             Requested size: 486.54057pt x 319.56242pt.
+ [7 <./parameters_vs_p.png>]
+<resolution_vs_resolution.png, id=190, 1494.58376pt x 949.5475pt>
 File: resolution_vs_resolution.png Graphic file (type png)
 <use resolution_vs_resolution.png>
-Package pdftex.def Info: resolution_vs_resolution.png  used on input line 267.
+Package pdftex.def Info: resolution_vs_resolution.png  used on input line 242.
 (pdftex.def)             Requested size: 486.54057pt x 309.10638pt.
- [7 <./parameters_vs_eta.png>]
-<resolution_vs_thickness.png, id=187, 1594.95876pt x 1039.885pt>
+ [8 <./parameters_vs_eta.png> <./resolution_vs_resolution.png>]
+<resolution_vs_thickness.png, id=199, 1594.95876pt x 1039.885pt>
 File: resolution_vs_thickness.png Graphic file (type png)
 <use resolution_vs_thickness.png>
-Package pdftex.def Info: resolution_vs_thickness.png  used on input line 278.
+Package pdftex.def Info: resolution_vs_thickness.png  used on input line 255.
 (pdftex.def)             Requested size: 512.14963pt x 333.91245pt.
- [8 <./resolution_vs_resolution.png>]
-<resolution_vs_B.png, id=197, 1494.58376pt x 497.86pt>
+<resolution_vs_B.png, id=207, 1494.58376pt x 497.86pt>
 File: resolution_vs_B.png Graphic file (type png)
 <use resolution_vs_B.png>
-Package pdftex.def Info: resolution_vs_B.png  used on input line 291.
+Package pdftex.def Info: resolution_vs_B.png  used on input line 273.
 (pdftex.def)             Requested size: 512.14963pt x 170.59958pt.
-
-[9 <./resolution_vs_thickness.png> <./resolution_vs_B.png>] (./B8_Report.bbl)
-[10] (./B8_Report.aux)
+ [9 <./resolution_vs_thickness.png>] (./B8_Report.bbl) [10 <./resolution_vs_B.p
+ng>]
+(./B8_Report.aux)
  ***********
 LaTeX2e <2023-11-01> patch level 1
 L3 programming layer <2024-02-20>
  ***********
 Package rerunfilecheck Info: File `B8_Report.out' has not changed.
-(rerunfilecheck)             Checksum: 89D6C8969A2FFEE9EA310D35A308F386;3623.
+(rerunfilecheck)             Checksum: A87377D565AC507C4D2B6A5B0937BBF7;3141.
  ) 
 Here is how much of TeX's memory you used:
- 18733 strings out of 474116
- 343917 string characters out of 5743681
- 1947187 words of memory out of 5000000
- 40838 multiletter control sequences out of 15000+600000
- 648418 words of font info for 157 fonts, out of 8000000 for 9000
+ 18760 strings out of 474116
+ 344609 string characters out of 5743681
+ 1949187 words of memory out of 5000000
+ 40857 multiletter control sequences out of 15000+600000
+ 648774 words of font info for 158 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 75i,10n,87p,1708b,950s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ 75i,8n,83p,1163b,950s stack positions out of 10000i,1000n,20000p,200000b,200000s
 </usr/local/texlive/2024/texmf-dist/fonts/type1/public/stix/STIXGeneral-Bold.
 pfb></usr/local/texlive/2024/texmf-dist/fonts/type1/public/stix/STIXGeneral-Ita
 lic.pfb></usr/local/texlive/2024/texmf-dist/fonts/type1/public/stix/STIXGeneral
 -Regular.pfb></usr/local/texlive/2024/texmf-dist/fonts/type1/public/cm-super/sf
-tt1000.pfb></usr/local/texlive/2024/texmf-dist/fonts/type1/public/stix/stix-mat
-hcal.pfb></usr/local/texlive/2024/texmf-dist/fonts/type1/public/stix/stix-mathe
-x.pfb></usr/local/texlive/2024/texmf-dist/fonts/type1/public/stix/stix-mathit.p
-fb></usr/local/texlive/2024/texmf-dist/fonts/type1/public/stix/stix-mathrm.pfb>
-</usr/local/texlive/2024/texmf-dist/fonts/type1/public/stix/stix-mathscr.pfb>
-Output written on B8_Report.pdf (11 pages, 4473905 bytes).
+tt0800.pfb></usr/local/texlive/2024/texmf-dist/fonts/type1/public/cm-super/sftt
+1000.pfb></usr/local/texlive/2024/texmf-dist/fonts/type1/public/stix/stix-mathc
+al.pfb></usr/local/texlive/2024/texmf-dist/fonts/type1/public/stix/stix-mathex.
+pfb></usr/local/texlive/2024/texmf-dist/fonts/type1/public/stix/stix-mathit.pfb
+></usr/local/texlive/2024/texmf-dist/fonts/type1/public/stix/stix-mathrm.pfb>
+Output written on B8_Report.pdf (11 pages, 4588385 bytes).
 PDF statistics:
- 273 PDF objects out of 1000 (max. 8388607)
- 223 compressed objects within 3 object streams
- 62 named destinations out of 1000 (max. 500000)
- 201 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 285 PDF objects out of 1000 (max. 8388607)
+ 231 compressed objects within 3 object streams
+ 69 named destinations out of 1000 (max. 500000)
+ 179 words of extra memory for PDF output out of 10000 (max. 10000000)
 
