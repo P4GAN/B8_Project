@@ -83,16 +83,9 @@ def fit_helix(x, y, z, B):
     return d0, z0, phi0, pT_MeV, tanl
 
 # Equation of the helix
-def helix(x_c, y_c, z0, pZ, pT, R, phi):
-    x = x_c + R * np.cos(phi)
-    y = y_c + R * np.sin(phi)
-    z = z0 + (pZ / pT) * R * (phi - phi[0])
+def helix(phi, d0, z0, tanl, R, phi0):
+    x = -d0 * np.sin(phi0) + np.abs(R) * (np.sin(phi) - np.sin(phi0))
+    y = d0 * np.cos(phi0) - np.abs(R) * (np.cos(phi) - np.cos(phi0))
+    z = z0 + tanl * R * (phi - phi0)
 
     return x, y, z
-
-# Calculate the root mean squared error of fit from data points
-def RMSE(x, y, z, x_c, y_c, z0, pZ, pT, R):
-    phi = np.unwrap(np.arctan2(y - y_c, x - x_c))
-    x_fit, y_fit, z_fit = helix(x_c, y_c, z0, pZ, pT, R, phi)
-
-    return np.sqrt(np.mean((x - x_fit) ** 2 + (y - y_fit) ** 2 + (z - z_fit) ** 2))
