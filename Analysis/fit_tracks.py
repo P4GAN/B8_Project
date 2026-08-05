@@ -67,6 +67,5 @@ for i in range(num_tracks):
         "NumHits": tracks.NumHits
     })
 
-
 df = pd.DataFrame(data)
 df.to_csv(output_csv_file, index=False)    

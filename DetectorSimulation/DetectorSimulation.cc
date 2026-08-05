@@ -52,11 +52,9 @@ int main(int argc, char **argv)
     G4SteppingVerbose::UseBestUnit(precision);
 
     // Construct the default run manager
-    //
     auto runManager = G4RunManagerFactory::CreateRunManager(G4RunManagerType::Default);
 
     // Set mandatory initialization classes
-    //
     runManager->SetUserInitialization(new DetectorConstruction());
 
     auto physicsList = new FTFP_BERT;

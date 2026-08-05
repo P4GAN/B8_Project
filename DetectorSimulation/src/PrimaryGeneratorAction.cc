@@ -84,58 +84,6 @@ void PrimaryGeneratorAction::GeneratePrimaries(G4Event *event)
     fParticleGun->SetParticleMomentum(momentum);
     fParticleGun->SetParticlePosition(G4ThreeVector(0., 0., 0.));
     fParticleGun->GeneratePrimaryVertex(event);
+    
     return;
-
-
-    /* Emit particles from HepMC file
-    G4ParticleTable *particleTable = G4ParticleTable::GetParticleTable();
-    std::string hepmcFileName = "../electron_proton.hepmc";
-    HepMC3::ReaderAscii hepMCReader("events.hepmc");
-
-    while (!hepMCReader.failed())
-    {
-        HepMC3::GenEvent hepmcEvent;
-        hepMCReader.read_event(hepmcEvent);
-
-        for (auto vertex : hepmcEvent.vertices())
-        {
-            auto position = vertex->position();
-
-            auto g4Vertex = new G4PrimaryVertex(
-                position.x() * mm,
-                position.y() * mm,
-                position.z() * mm,
-                position.t() * ns);
-
-            for (auto particle : vertex->particles_out())
-            {
-                // HepMC3 status convention: 1 is usually final state
-                if (particle->status() != 1)
-                    continue;
-
-                G4ParticleDefinition *particleDef = particleTable->FindParticle(particle->pid());
-                G4cout << "Emitted " << particleDef->GetParticleName() << " with energy " << particle->momentum().e() << " GeV" << G4endl;
-
-                auto momentum = particle->momentum();
-                auto primary = new G4PrimaryParticle(
-                    particle->pid(),
-                    momentum.px() * GeV,
-                    momentum.py() * GeV,
-                    momentum.pz() * GeV);
-
-                g4Vertex->SetPrimary(primary);
-            }
-
-            // Only keep vertices that actually have primaries
-            if (g4Vertex->GetNumberOfParticle() > 0)
-            {
-                event->AddPrimaryVertex(g4Vertex);
-            }
-            else
-            {
-                delete g4Vertex;
-            }
-        }
-    }
-    */  
 }

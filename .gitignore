@@ -8,4 +8,4 @@
 /DetectorSimulation/output
 
 /Analysis/output
-
+/Analysis/__pycache__
