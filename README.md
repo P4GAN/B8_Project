@@ -2,9 +2,16 @@
 
 This repository contains code for Monte Carlo simulations of particle transport in the ePIC Silicon Vertex Tracker using Geant4, along with Python code for track fitting and evaluating detector performance. This code is written for a B8 computational project as part of the MPhys Physics degree at Oxford. 
 
+<img width="1576" height="570" alt="geant4_screenshot" src="https://github.com/user-attachments/assets/17fd1293-0e01-4925-83b0-96d4d7a8f4fa" />
+<img width="1489" height="978" alt="parameters_vs_eta" src="https://github.com/user-attachments/assets/126b71e5-951f-4e52-94fa-7f2c9f817cce" />
+
+
 The /DetectorSimulation/ folder contains the Geant4 simulation of the ePIC SVT
+
 The /CollisionSimulation/ folder contains a short Pythia8 code for simulating the result of a typical electron-proton collision at the EIC
+
 The /Analysis/ folder contains Python files and Jupyter notebooks for track fitting from detector hits, as well as plots of tracking performance
+
 The /Report/ folder contains the LaTeX files for the final report
 
 ## Setup
