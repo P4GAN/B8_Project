@@ -12,7 +12,9 @@ The /CollisionSimulation/ folder contains a short Pythia8 code for simulating th
 
 The /Analysis/ folder contains Python files and Jupyter notebooks for track fitting from detector hits, as well as plots of tracking performance
 
-The /Report/ folder contains the LaTeX files for the final report
+The /Report/ folder contains the LaTeX files for the final [report](Report/B8_Report.pdf)
+
+The /Presentation/ folder contains the LaTeX files for the [presentation](Presentation/B8_Presentation.pdf) given about the project
 
 ## Setup
 

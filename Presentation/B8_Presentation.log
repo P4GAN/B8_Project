@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.26 (TeX Live 2024) (preloaded format=pdflatex 2024.11.20)  3 JUN 2026 22:30
+This is pdfTeX, Version 3.141592653-2.6-1.40.26 (TeX Live 2024) (preloaded format=pdflatex 2024.11.20)  3 JUN 2026 22:48
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -1321,11 +1321,11 @@ Package biblatex Info: Reference segment=0 on input line 51.
  (./B8_Presentation.nav) [1
 
 {/usr/local/texlive/2024/texmf-var/fonts/map/pdftex/updmap/pdftex.map}]
-<epic_SVT_diagram.png, id=46, 6057.63126pt x 1595.9625pt>
+<epic_SVT_diagram.png, id=46, 4516.875pt x 1190.4475pt>
 File: epic_SVT_diagram.png Graphic file (type png)
 <use epic_SVT_diagram.png>
 Package pdftex.def Info: epic_SVT_diagram.png  used on input line 71.
-(pdftex.def)             Requested size: 245.83282pt x 64.753pt.
+(pdftex.def)             Requested size: 276.559pt x 72.87694pt.
  [2
 
  <./epic_SVT_diagram.png>]
@@ -1348,7 +1348,7 @@ Overfull \hbox (0.92593pt too wide) in paragraph at lines 114--114
 [3
 
 ]
-<detector_layout.png, id=67, 1394.20876pt x 792.9625pt>
+<detector_layout.png, id=69, 1394.20876pt x 792.9625pt>
 File: detector_layout.png Graphic file (type png)
 <use detector_layout.png>
 Package pdftex.def Info: detector_layout.png  used on input line 127.
@@ -1356,7 +1356,7 @@ Package pdftex.def Info: detector_layout.png  used on input line 127.
  [4
 
  <./detector_layout.png>]
-<geant4_screenshot.png, id=81, 1581.91pt x 572.1375pt>
+<geant4_screenshot.png, id=82, 1581.91pt x 572.1375pt>
 File: geant4_screenshot.png Graphic file (type png)
 <use geant4_screenshot.png>
 Package pdftex.def Info: geant4_screenshot.png  used on input line 142.
@@ -1364,7 +1364,7 @@ Package pdftex.def Info: geant4_screenshot.png  used on input line 142.
  [5
 
  <./geant4_screenshot.png>]
-<MAPS_diagram.png, id=92, 1125.20375pt x 564.1075pt>
+<MAPS_diagram.png, id=93, 1125.20375pt x 564.1075pt>
 File: MAPS_diagram.png Graphic file (type png)
 <use MAPS_diagram.png>
 Package pdftex.def Info: MAPS_diagram.png  used on input line 156.
@@ -1378,12 +1378,12 @@ File: ts1cmss.fd 2023/04/13 v2.5m Standard LaTeX font definitions
 
 {/usr/local/texlive/2024/texmf-dist/fonts/enc/dvips/cm-super/cm-super-ts1.enc} 
 <./MAPS_diagram.png>] Excluding 'comment' comment.
-<circular_fit.png, id=104, 585.18625pt x 454.69875pt>
+<circular_fit.png, id=105, 585.18625pt x 454.69875pt>
 File: circular_fit.png Graphic file (type png)
 <use circular_fit.png>
 Package pdftex.def Info: circular_fit.png  used on input line 198.
 (pdftex.def)             Requested size: 153.64493pt x 119.38449pt.
-<linear_fit.png, id=105, 582.175pt x 460.72125pt>
+<linear_fit.png, id=106, 582.175pt x 460.72125pt>
 File: linear_fit.png Graphic file (type png)
 <use linear_fit.png>
 Package pdftex.def Info: linear_fit.png  used on input line 198.
@@ -1391,7 +1391,7 @@ Package pdftex.def Info: linear_fit.png  used on input line 198.
  [7
 
  <./circular_fit.png> <./linear_fit.png>]
-<helical_fit.png, id=119, 561.09625pt x 561.09625pt>
+<helical_fit.png, id=120, 561.09625pt x 561.09625pt>
 File: helical_fit.png Graphic file (type png)
 <use helical_fit.png>
 Package pdftex.def Info: helical_fit.png  used on input line 206.
@@ -1403,7 +1403,7 @@ Overfull \vbox (16.68762pt too high) detected at line 206
 [8
 
  <./helical_fit.png>]
-<gaussian_histogram_fit.png, id=130, 576.1525pt x 460.72125pt>
+<gaussian_histogram_fit.png, id=131, 576.1525pt x 460.72125pt>
 File: gaussian_histogram_fit.png Graphic file (type png)
 <use gaussian_histogram_fit.png>
 Package pdftex.def Info: gaussian_histogram_fit.png  used on input line 228.
@@ -1412,7 +1412,7 @@ Package pdftex.def Info: gaussian_histogram_fit.png  used on input line 228.
 
  <./gaussian_histogram_fit.png>]
 Excluding 'comment' comment.
-<resolution_vs_resolution.png, id=146, 1494.58376pt x 949.5475pt>
+<resolution_vs_resolution.png, id=147, 1494.58376pt x 949.5475pt>
 File: resolution_vs_resolution.png Graphic file (type png)
 <use resolution_vs_resolution.png>
 Package pdftex.def Info: resolution_vs_resolution.png  used on input line 248.
@@ -1420,7 +1420,7 @@ Package pdftex.def Info: resolution_vs_resolution.png  used on input line 248.
  [10
 
  <./resolution_vs_resolution.png>]
-<resolution_vs_thickness.png, id=157, 1594.95876pt x 1039.885pt>
+<resolution_vs_thickness.png, id=158, 1594.95876pt x 1039.885pt>
 File: resolution_vs_thickness.png Graphic file (type png)
 <use resolution_vs_thickness.png>
 Package pdftex.def Info: resolution_vs_thickness.png  used on input line 257.
@@ -1428,7 +1428,7 @@ Package pdftex.def Info: resolution_vs_thickness.png  used on input line 257.
  [11
 
  <./resolution_vs_thickness.png>]
-<resolution_vs_B.png, id=168, 1494.58376pt x 497.86pt>
+<resolution_vs_B.png, id=169, 1494.58376pt x 497.86pt>
 File: resolution_vs_B.png Graphic file (type png)
 <use resolution_vs_B.png>
 Package pdftex.def Info: resolution_vs_B.png  used on input line 266.
@@ -1487,9 +1487,9 @@ l/texlive/2024/texmf-dist/fonts/type1/public/amsfonts/cm/cmss12.pfb></usr/local
 exlive/2024/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/local/te
 xlive/2024/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy8.pfb></usr/local/texl
 ive/2024/texmf-dist/fonts/type1/public/cm-super/sfss1095.pfb>
-Output written on B8_Presentation.pdf (13 pages, 4440539 bytes).
+Output written on B8_Presentation.pdf (13 pages, 3407324 bytes).
 PDF statistics:
- 247 PDF objects out of 1000 (max. 8388607)
+ 248 PDF objects out of 1000 (max. 8388607)
  155 compressed objects within 2 object streams
  38 named destinations out of 1000 (max. 500000)
  168 words of extra memory for PDF output out of 10000 (max. 10000000)
